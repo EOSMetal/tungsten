@@ -57,20 +57,19 @@ of the bond by its creator.
       of funds by the `claimer` or denies it.
     - `details`: Details of the resolution.
   - Required authorization: `arbitrator` of the bond associated to the claim.
-  - Effect: Subtracts the penalty from the bond and pays it the receiver and
-    closes the claim.
+  - Effect: Closes the claim, extracts the arbitrator fee from the claim's
+    security deposit and, depending on the `authorize` parameter, it either
+    pays the claimed amount to the `claimer` plus the rest of their deposit or
+    pays the rest of that deposit to the creator of the bond as compensation.
 - `closeclaim`
   - Parameters:
     - `claim_id`: ID of the claim.
-  - Required authorization: User who created the claim (`claimer`) or user who
-    created the bond associated with the claim (`creator`).
+  - Required authorization: User who created the claim (`claimer`).
   - Effect:
-    - After claim expiration date, if there is no ruling, returns the security
+    - If expiration date of the claim has passed, returns the security
       deposit to the `claimer` and closes the claim.
-    - After ruling in favor of the `claimer`, allows them to close the claim
-      and withdraw their deposit plus the authorized claim amount.
-    - After ruling in favor of the `creator` of the bond, allows them to
-      close the claim and withdraw the `claimer`'s deposit.
+    - Before claim expiration date, if the bond's deposit is empty, returns
+      the claim's security deposit to the `claimer` and closes the claim.
 
 ## Usage example
 
@@ -87,3 +86,7 @@ of the bond by its creator.
   started investigating it.
 - Allow bond creators to authorize a claim if they agree with it, without
   the need of arbitrator intervention.
+- Allow arbitrators to only rule claims in order of submission or some
+  other important criteria.
+- Allow bond creators to refill the security deposit of their bond with
+  more funds.

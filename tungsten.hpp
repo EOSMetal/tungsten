@@ -26,6 +26,7 @@ namespace models {
         string ricardian;
         uint64_t expiration;
         account_name arbitrator;
+        uint32_t active_claims = 0;
 
         static uint64_t produce_id(account_name creator, string ricardian) {
             return string_hasher(name{creator}.to_string() + ricardian);
@@ -44,9 +45,6 @@ namespace models {
         string details;
         string language;
         uint64_t expiration;
-        bool ruled = false;
-        bool authorized = false;
-        string ruling_details;
 
         static uint64_t produce_id(account_name claimer, uint64_t bond_id, string details) {
             return string_hasher(name{claimer}.to_string() +
@@ -65,6 +63,11 @@ class tungsten : public contract {
   public:
     using contract::contract;
 
+    const uint64_t claim_expiration = 7 * 24 * 60 * 60;
+    const uint64_t claim_expiration_extension = 24 * 60 * 60;
+    const float claim_security_deposit = 0.1;
+    const float arbitrator_fee = 0.2;
+
     void createbond(account_name creator, asset deposit,
                     string ricardian, uint64_t expiration,
                     account_name arbitrator);
@@ -77,4 +80,4 @@ class tungsten : public contract {
     void closeclaim(uint64_t claim_id);
 };
 
-EOSIO_ABI(tungsten, (createbond))
+EOSIO_ABI(tungsten, (createbond)(renewbond)(closebond)(createclaim)(delayclaim)(ruleclaim)(closeclaim))
