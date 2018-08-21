@@ -31,7 +31,7 @@ void tungsten::createbond(account_name creator, asset deposit,
 
 void tungsten::renewbond(uint64_t bond_id, uint64_t expiration) {
     bonds_table bonds(_self, bond_id);
-    bond_type bond = bonds.get(bond_id, "Unable to find bond with the provided ID");
+    auto &bond = bonds.get(bond_id, "Unable to find bond with the provided ID");
 
     require_auth(bond.creator);
 
@@ -44,7 +44,7 @@ void tungsten::renewbond(uint64_t bond_id, uint64_t expiration) {
 
 void tungsten::closebond(uint64_t bond_id) {
     bonds_table bonds(_self, bond_id);
-    bond_type bond = bonds.get(bond_id, "Unable to find bond with the provided ID");
+    auto &bond = bonds.get(bond_id, "Unable to find bond with the provided ID");
 
     require_auth(bond.creator);
 
@@ -65,7 +65,7 @@ void tungsten::createclaim(account_name claimer, uint64_t bond_id,
     require_auth(claimer);
 
     bonds_table bonds(_self, bond_id);
-    bond_type bond = bonds.get(bond_id, "Unable to find bond with the provided ID");
+    auto &bond = bonds.get(bond_id, "Unable to find bond with the provided ID");
 
     eosio_assert(amount.symbol == asset().symbol, "Claimed amount must be in the system token");
     eosio_assert(amount.amount > 0, "Claimed amount must be greater than zero");
@@ -98,9 +98,9 @@ void tungsten::createclaim(account_name claimer, uint64_t bond_id,
 
 void tungsten::delayclaim(uint64_t claim_id) {
     claims_table claims(_self, claim_id);
-    claim_type claim = claims.get(claim_id, "Unable to find claim with the provided ID");
+    auto &claim = claims.get(claim_id, "Unable to find claim with the provided ID");
     bonds_table bonds(_self, claim.bond_id);
-    bond_type bond = bonds.get(claim.bond_id, "Unable to find bond associated with the claim");
+    auto &bond = bonds.get(claim.bond_id, "Unable to find bond associated with the claim");
 
     require_auth(bond.arbitrator);
 
@@ -113,9 +113,9 @@ void tungsten::delayclaim(uint64_t claim_id) {
 
 void tungsten::ruleclaim(uint64_t claim_id, bool authorize, string details) {
     claims_table claims(_self, claim_id);
-    claim_type claim = claims.get(claim_id, "Unable to find claim with the provided ID");
+    auto &claim = claims.get(claim_id, "Unable to find claim with the provided ID");
     bonds_table bonds(_self, claim.bond_id);
-    bond_type bond = bonds.get(claim.bond_id, "Unable to find bond associated with the claim");
+    auto &bond = bonds.get(claim.bond_id, "Unable to find bond associated with the claim");
 
     require_auth(bond.arbitrator);
 
@@ -165,9 +165,9 @@ void tungsten::ruleclaim(uint64_t claim_id, bool authorize, string details) {
 
 void tungsten::closeclaim(uint64_t claim_id) {
     claims_table claims(_self, claim_id);
-    claim_type claim = claims.get(claim_id, "Unable to find claim with the provided ID");
+    auto &claim = claims.get(claim_id, "Unable to find claim with the provided ID");
     bonds_table bonds(_self, claim.bond_id);
-    bond_type bond = bonds.get(claim.bond_id, "Unable to find bond associated with the claim");
+    auto &bond = bonds.get(claim.bond_id, "Unable to find bond associated with the claim");
 
     require_auth(claim.claimer);
 
