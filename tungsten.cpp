@@ -4,6 +4,7 @@ void tungsten::createbond(account_name creator, account_name bond_name, asset de
                           string ricardian, uint64_t expiration, account_name arbitrator) {
     require_auth(creator);
 
+    eosio_assert(bond_name != 0, "Bond name is required");
     eosio_assert(deposit.symbol == asset().symbol, "Deposit must be in the system token");
     eosio_assert(deposit.amount > 0, "Deposit amount must be greater than zero");
     eosio_assert(ricardian.length() > 0, "Ricardian contract is required");
@@ -65,6 +66,7 @@ void tungsten::createclaim(account_name claimer, account_name bond_name,
     bonds_table bonds(_self, bond_name);
     auto &bond = bonds.get(bond_name, "Unable to find bond with the provided name");
 
+    eosio_assert(claim_name != 0, "Claim name is required");
     eosio_assert(amount.symbol == asset().symbol, "Claimed amount must be in the system token");
     eosio_assert(amount.amount > 0, "Claimed amount must be greater than zero");
     eosio_assert(bond.deposit.amount > 0, "There are no funds remaining in the deposit of the bond");
