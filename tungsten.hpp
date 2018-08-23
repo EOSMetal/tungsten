@@ -66,9 +66,9 @@ class tungsten : public contract {
     void closebond(account_name bond_name);
     void createclaim(account_name claimer, account_name bond_name,
                      account_name claim_name, asset amount, string details, string language);
-    void delayclaim(uint64_t claim_id);
-    void ruleclaim(uint64_t claim_id, bool authorize, string details);
-    void closeclaim(uint64_t claim_id);
+    void delayclaim(account_name claim_name);
+    void ruleclaim(account_name claim_name, bool authorize, string details);
+    void closeclaim(account_name claim_name);
 };
 
 EOSIO_ABI(tungsten, (createbond)(renewbond)(closebond)(createclaim)(delayclaim)(ruleclaim)(closeclaim))
