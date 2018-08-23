@@ -20,7 +20,7 @@ namespace models {
 
     //@abi table bonds i64
     struct bond_type {
-        uint64_t id;
+        account_name name;
         account_name creator;
         asset deposit;
         string ricardian;
@@ -28,30 +28,22 @@ namespace models {
         account_name arbitrator;
         uint32_t active_claims = 0;
 
-        static uint64_t produce_id(account_name creator, string ricardian) {
-            return string_hasher(name{creator}.to_string() + ricardian);
-        }
-        uint64_t primary_key() const { return id; }
+        uint64_t primary_key() const { return name; }
     };
 
     typedef eosio::multi_index<N(bonds), bond_type> bonds_table;
 
     //@abi table claims i64
     struct claim_type {
-        uint64_t id;
+        account_name name;
         account_name claimer;
-        uint64_t bond_id;
+        account_name bond_name;
         asset amount;
         string details;
         string language;
         uint64_t expiration;
 
-        static uint64_t produce_id(account_name claimer, uint64_t bond_id, string details) {
-            return string_hasher(name{claimer}.to_string() +
-                                 std::to_string(bond_id) +
-                                 details);
-        }
-        uint64_t primary_key() const { return id; }
+        uint64_t primary_key() const { return name; }
     };
 
     typedef eosio::multi_index<N(claims), claim_type> claims_table;
@@ -68,13 +60,12 @@ class tungsten : public contract {
     const float claim_security_deposit = 0.1;
     const float arbitrator_fee = 0.2;
 
-    void createbond(account_name creator, asset deposit,
-                    string ricardian, uint64_t expiration,
-                    account_name arbitrator);
-    void renewbond(uint64_t bond_id, uint64_t expiration);
-    void closebond(uint64_t bond_id);
-    void createclaim(account_name claimer, uint64_t bond_id,
-                     asset amount, string details, string language);
+    void createbond(account_name creator, account_name bond_name, asset deposit,
+                    string ricardian, uint64_t expiration, account_name arbitrator);
+    void renewbond(account_name bond_name, uint64_t expiration);
+    void closebond(account_name bond_name);
+    void createclaim(account_name claimer, account_name bond_name,
+                     account_name claim_name, asset amount, string details, string language);
     void delayclaim(uint64_t claim_id);
     void ruleclaim(uint64_t claim_id, bool authorize, string details);
     void closeclaim(uint64_t claim_id);

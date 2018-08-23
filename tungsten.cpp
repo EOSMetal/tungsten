@@ -1,8 +1,7 @@
 #include "tungsten.hpp"
 
-void tungsten::createbond(account_name creator, asset deposit,
-                          string ricardian, uint64_t expiration,
-                          account_name arbitrator) {
+void tungsten::createbond(account_name creator, account_name bond_name, asset deposit,
+                          string ricardian, uint64_t expiration, account_name arbitrator) {
     require_auth(creator);
 
     eosio_assert(deposit.symbol == asset().symbol, "Deposit must be in the system token");
@@ -11,11 +10,10 @@ void tungsten::createbond(account_name creator, asset deposit,
     eosio_assert(expiration > now(), "Expiration date must be in the future");
     eosio_assert(is_account(arbitrator), "Arbitrator must be a real account");
 
-    uint64_t id = bond_type::produce_id(creator, ricardian);
-    bonds_table bonds(_self, id);
+    bonds_table bonds(_self, bond_name);
     bonds.emplace(creator, [&](bond_type &bond) {
-        bond.id = id;
         bond.creator = creator;
+        bond.name = bond_name;
         bond.deposit = deposit;
         bond.ricardian = ricardian;
         bond.expiration = expiration;
@@ -25,13 +23,13 @@ void tungsten::createbond(account_name creator, asset deposit,
     action(permission_level{creator, N(active)},
            N(eosio.token), N(transfer),
            std::make_tuple(creator, _self, deposit,
-                           string("Security deposit for bond ") + std::to_string(id)))
+                           string("Security deposit for bond ") + name{bond_name}.to_string()))
         .send();
 }
 
-void tungsten::renewbond(uint64_t bond_id, uint64_t expiration) {
-    bonds_table bonds(_self, bond_id);
-    auto &bond = bonds.get(bond_id, "Unable to find bond with the provided ID");
+void tungsten::renewbond(account_name bond_name, uint64_t expiration) {
+    bonds_table bonds(_self, bond_name);
+    auto &bond = bonds.get(bond_name, "Unable to find bond with the provided name");
 
     require_auth(bond.creator);
 
@@ -42,9 +40,9 @@ void tungsten::renewbond(uint64_t bond_id, uint64_t expiration) {
     });
 }
 
-void tungsten::closebond(uint64_t bond_id) {
-    bonds_table bonds(_self, bond_id);
-    auto &bond = bonds.get(bond_id, "Unable to find bond with the provided ID");
+void tungsten::closebond(account_name bond_name) {
+    bonds_table bonds(_self, bond_name);
+    auto &bond = bonds.get(bond_name, "Unable to find bond with the provided name");
 
     require_auth(bond.creator);
 
@@ -56,16 +54,16 @@ void tungsten::closebond(uint64_t bond_id) {
     action(permission_level{_self, N(active)},
            N(eosio.token), N(transfer),
            std::make_tuple(_self, bond.creator, bond.deposit,
-                           string("Close bond ") + std::to_string(bond.id)))
+                           string("Close bond ") + name{bond_name}.to_string()))
         .send();
 }
 
-void tungsten::createclaim(account_name claimer, uint64_t bond_id,
-                           asset amount, string details, string language) {
+void tungsten::createclaim(account_name claimer, account_name bond_name,
+                           account_name claim_name, asset amount, string details, string language) {
     require_auth(claimer);
 
-    bonds_table bonds(_self, bond_id);
-    auto &bond = bonds.get(bond_id, "Unable to find bond with the provided ID");
+    bonds_table bonds(_self, bond_name);
+    auto &bond = bonds.get(bond_name, "Unable to find bond with the provided name");
 
     eosio_assert(amount.symbol == asset().symbol, "Claimed amount must be in the system token");
     eosio_assert(amount.amount > 0, "Claimed amount must be greater than zero");
@@ -77,12 +75,11 @@ void tungsten::createclaim(account_name claimer, uint64_t bond_id,
         bond.active_claims++;
     });
 
-    uint64_t id = claim_type::produce_id(claimer, bond_id, details);
-    claims_table claims(_self, id);
+    claims_table claims(_self, claim_name);
     claims.emplace(claimer, [&](claim_type &claim) {
-        claim.id = id;
+        claim.name = claim_name;
         claim.claimer = claimer;
-        claim.bond_id = bond_id;
+        claim.bond_name = bond_name;
         claim.amount = amount;
         claim.details = details;
         claim.language = language;
@@ -92,15 +89,15 @@ void tungsten::createclaim(account_name claimer, uint64_t bond_id,
     action(permission_level{claimer, N(active)},
            N(eosio.token), N(transfer),
            std::make_tuple(claimer, _self, asset(amount.amount * this->claim_security_deposit),
-                           string("Security deposit for claim ") + std::to_string(id)))
+                           string("Security deposit for claim ") + name{claim_name}.to_string()))
         .send();
 }
 
-void tungsten::delayclaim(uint64_t claim_id) {
-    claims_table claims(_self, claim_id);
-    auto &claim = claims.get(claim_id, "Unable to find claim with the provided ID");
-    bonds_table bonds(_self, claim.bond_id);
-    auto &bond = bonds.get(claim.bond_id, "Unable to find bond associated with the claim");
+void tungsten::delayclaim(account_name claim_name) {
+    claims_table claims(_self, claim_name);
+    auto &claim = claims.get(claim_name, "Unable to find claim with the provided name");
+    bonds_table bonds(_self, claim.bond_name);
+    auto &bond = bonds.get(claim.bond_name, "Unable to find bond associated with the claim");
 
     require_auth(bond.arbitrator);
 
@@ -111,11 +108,11 @@ void tungsten::delayclaim(uint64_t claim_id) {
     });
 }
 
-void tungsten::ruleclaim(uint64_t claim_id, bool authorize, string details) {
-    claims_table claims(_self, claim_id);
-    auto &claim = claims.get(claim_id, "Unable to find claim with the provided ID");
-    bonds_table bonds(_self, claim.bond_id);
-    auto &bond = bonds.get(claim.bond_id, "Unable to find bond associated with the claim");
+void tungsten::ruleclaim(account_name claim_name, bool authorize, string details) {
+    claims_table claims(_self, claim_name);
+    auto &claim = claims.get(claim_name, "Unable to find claim with the provided name");
+    bonds_table bonds(_self, claim.bond_name);
+    auto &bond = bonds.get(claim.bond_name, "Unable to find bond associated with the claim");
 
     require_auth(bond.arbitrator);
 
@@ -129,7 +126,7 @@ void tungsten::ruleclaim(uint64_t claim_id, bool authorize, string details) {
     action(permission_level{_self, N(active)},
            N(eosio.token), N(transfer),
            std::make_tuple(_self, bond.arbitrator, arbitrator_fee,
-                           string("Arbitration fee for claim ") + std::to_string(claim_id)))
+                           string("Arbitration fee for claim ") + name{claim_name}.to_string()))
         .send();
 
     if (authorize) {
@@ -147,13 +144,13 @@ void tungsten::ruleclaim(uint64_t claim_id, bool authorize, string details) {
         action(permission_level{_self, N(active)},
                N(eosio.token), N(transfer),
                std::make_tuple(_self, claim.claimer, balance,
-                               string("Claimed on approved claim ") + std::to_string(claim_id)))
+                               string("Approved claim ") + name{claim_name}.to_string()))
             .send();
     } else {
         action(permission_level{_self, N(active)},
                N(eosio.token), N(transfer),
                std::make_tuple(_self, bond.creator, balance,
-                               string("Compensation for rejected claim ") + std::to_string(claim_id)))
+                               string("Compensation for rejected claim ") + name{claim_name}.to_string()))
             .send();
     }
 
@@ -163,11 +160,11 @@ void tungsten::ruleclaim(uint64_t claim_id, bool authorize, string details) {
     });
 }
 
-void tungsten::closeclaim(uint64_t claim_id) {
-    claims_table claims(_self, claim_id);
-    auto &claim = claims.get(claim_id, "Unable to find claim with the provided ID");
-    bonds_table bonds(_self, claim.bond_id);
-    auto &bond = bonds.get(claim.bond_id, "Unable to find bond associated with the claim");
+void tungsten::closeclaim(account_name claim_name) {
+    claims_table claims(_self, claim_name);
+    auto &claim = claims.get(claim_name, "Unable to find claim with the provided name");
+    bonds_table bonds(_self, claim.bond_name);
+    auto &bond = bonds.get(claim.bond_name, "Unable to find bond associated with the claim");
 
     require_auth(claim.claimer);
 
@@ -177,7 +174,7 @@ void tungsten::closeclaim(uint64_t claim_id) {
     action(permission_level{_self, N(active)},
            N(eosio.token), N(transfer),
            std::make_tuple(_self, claim.claimer, asset(claim.amount.amount * this->claim_security_deposit),
-                           string("Closed claim ") + std::to_string(claim_id)))
+                           string("Closed claim ") + name{claim_name}.to_string()))
         .send();
 
     claims.erase(claim);
