@@ -3,6 +3,7 @@ import sess
 import eosf
 import os
 import time
+import json
 
 node.reset()
 sess.init()
@@ -34,13 +35,34 @@ token.push_action('issue',
                   '["{}", "10000.0000 SYS"]'.format(claimer),
                   token.account)
 
-# Load tungsten contract and make it privileged
+# Load tungsten contract
 tungsten = eosf.account(sess.eosio)
 sess.wallet.import_key(tungsten)
 tungsten = eosf.Contract(tungsten, os.getcwd())
 tungsten.deploy()
-eosf.Contract(sess.eosio, 'eosio.bios').push_action(
-    'setpriv', '["{}", 1]'.format(tungsten.account))
+
+# Give the contract the necessary permissions from the accounts
+bios = eosf.Contract(sess.eosio, 'eosio.bios')
+authority = dict(
+    threshold=1,
+    keys=[dict(
+        key='',
+        weight=1)],
+    accounts=[dict(
+        permission=dict(actor=tungsten.account.name, permission='eosio.code'),
+        weight=1)],
+    waits=[])
+
+authority['keys'][0]['key'] = tungsten.account.active_key.key_public
+bios.push_action('updateauth', json.dumps([tungsten.account.name, 'active', 'owner', authority]), tungsten.account)
+authority['keys'][0]['key'] = bonder.active_key.key_public
+bios.push_action('updateauth', json.dumps([bonder.name, 'active', 'owner', authority]), bonder)
+authority['keys'][0]['key'] = claimer.active_key.key_public
+bios.push_action('updateauth', json.dumps([claimer.name, 'active', 'owner', authority]), claimer)
+
+# To make the contract account privileged instead - removes the need for permissions
+# eosf.Contract(sess.eosio, 'eosio.bios').push_action(
+#     'setpriv', '["{}", 1]'.format(tungsten.account))
 
 # Create a bond
 bond_name = 'mydappbond'

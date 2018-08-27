@@ -78,6 +78,24 @@ of the bond by its creator.
 - The arbitrator of the `UserA` bond makes a decision and calls `ruleclaim`.
 - The penalties and gains are distributed accordingly.
 
+## Important notes
+
+The contract is designed to be semantical in its actions, and thus the creation of
+a bond or claim will imply the transfer of the required funds for this creation,
+from the creator's account to the contract's account. This transfer will happen
+as an inline action, as is the case in the system contract's `buyram` and `bidname`
+actions, among others, so that the users are not forced to first deposit funds
+and then call this creation actions. Instead, the contract handles these transfers
+for the user, but to do so it requires one of the following things:
+
+- If the contract is deployed in a "privileged" account, such as the system contract's
+  account, then these inline transfers will work without any further action required by
+  the users.
+- Otherwise, if the contract is deployed into a regular account, the users will need to
+  give explicit permission to the contract's code to issue transfers in their name. This
+  is done by adding `<CONTRACT_ACCOUNT>@eosio.code` as a satisfying authority of the
+  `active` permission of the user's account.
+
 ## Possible improvements
 
 - Allow arbitrators to adjust the amount being requested by the claimers
