@@ -108,3 +108,7 @@ for the user, but to do so it requires one of the following things:
   other important criteria.
 - Allow bond creators to refill the security deposit of their bond with
   more funds.
+- Require arbitrators to first register in order to be appointed to bonds.
+  This registration would imply signing a ricardian contract that defines the
+  principles under which they should act, and would also require them to
+  create a bond as a commitment to these rules.
