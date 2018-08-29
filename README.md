@@ -13,6 +13,7 @@ of the bond by its creator.
 - `createbond`
   - Parameters:
     - `creator`: User creating the bond.
+    - `bond_name`: Name that uniquely identifies the bond.
     - `deposit`: Amount to deposit.
     - `ricardian`: Ricardian contract.
     - `expiration`: Expiration date.
@@ -21,22 +22,22 @@ of the bond by its creator.
   - Effect: Creates a bond and locks the deposit until the expiration date.
 - `renewbond`
   - Parameters:
-    - `bond_id`: ID of the bond.
+    - `bond_name`: Name that uniquely identifies the bond.
     - `expiration`: New expiration date.
   - Required authorization: `creator` of the bond.
   - Effect: Extends the expiration date of the bond.
 - `closebond`
   - Parameters:
-    - `bond_id`: ID of the bond.
-  - Required authorization: `creator` or `arbitrator` of the bond.
+    - `bond_name`: Name that uniquely identifies the bond.
+  - Required authorization: `creator` of the bond.
   - Effect:
     - If expiration date has passed and there are no open claims,
       closes the bond and withdraws the deposit.
-    - If run by the bond's arbitrator, forcefully closes it.
 - `createclaim`
   - Parameters:
     - `claimer`: User making the claim.
-    - `bond_id`: ID of the bond.
+    - `bond_name`: Name that uniquely identifies the bond.
+    - `claim_name`: Name that uniquely identifies the claim.
     - `amount`: Amount of the security deposit requested in the claim.
     - `details`: Details of the claim.
     - `language`: Language of the claim details.
@@ -47,12 +48,12 @@ of the bond by its creator.
     against the claimer.
 - `delayclaim`
   - Parameters:
-    - `claim_id`: ID of the claim.
+    - `claim_name`: Name that uniquely identifies the claim.
   - Required authorization: `arbitrator` of the bond associated to the claim.
   - Effect: Pushes the expiration date of the claim by a fixed amount.
 - `ruleclaim`
   - Parameters:
-    - `claim_id`: ID of the claim.
+    - `claim_name`: Name that uniquely identifies the claim.
     - `authorize`: Verdict of whether the arbitrator authorizes the claim
       of funds by the `claimer` or denies it.
     - `details`: Details of the resolution.
@@ -63,7 +64,7 @@ of the bond by its creator.
     pays the rest of that deposit to the creator of the bond as compensation.
 - `closeclaim`
   - Parameters:
-    - `claim_id`: ID of the claim.
+    - `claim_name`: Name that uniquely identifies the claim.
   - Required authorization: User who created the claim (`claimer`).
   - Effect:
     - If expiration date of the claim has passed, returns the security
