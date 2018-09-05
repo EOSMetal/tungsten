@@ -38,7 +38,7 @@ token.push_action('issue',
 # Load tungsten contract
 tungsten = eosf.account(sess.eosio)
 sess.wallet.import_key(tungsten)
-tungsten = eosf.Contract(tungsten, os.getcwd())
+tungsten = eosf.Contract(tungsten, os.path.join(os.getcwd(), 'contract'))
 tungsten.deploy()
 
 # Give the contract the necessary permissions from the accounts
