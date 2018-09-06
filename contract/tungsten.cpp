@@ -11,7 +11,7 @@ void tungsten::createbond(account_name creator, account_name bond_name, asset de
     eosio_assert(expiration > now(), "Expiration date must be in the future");
     eosio_assert(is_account(arbitrator), "Arbitrator must be a real account");
 
-    bonds_table bonds(_self, bond_name);
+    bonds_table bonds(_self, _self);
     bonds.emplace(creator, [&](bond_type &bond) {
         bond.creator = creator;
         bond.name = bond_name;
@@ -29,7 +29,7 @@ void tungsten::createbond(account_name creator, account_name bond_name, asset de
 }
 
 void tungsten::renewbond(account_name bond_name, uint64_t expiration) {
-    bonds_table bonds(_self, bond_name);
+    bonds_table bonds(_self, _self);
     auto &bond = bonds.get(bond_name, "Unable to find bond with the provided name");
 
     require_auth(bond.creator);
@@ -42,7 +42,7 @@ void tungsten::renewbond(account_name bond_name, uint64_t expiration) {
 }
 
 void tungsten::closebond(account_name bond_name) {
-    bonds_table bonds(_self, bond_name);
+    bonds_table bonds(_self, _self);
     auto &bond = bonds.get(bond_name, "Unable to find bond with the provided name");
 
     require_auth(bond.creator);
@@ -63,7 +63,7 @@ void tungsten::createclaim(account_name claimer, account_name bond_name,
                            account_name claim_name, asset amount, string details, string language) {
     require_auth(claimer);
 
-    bonds_table bonds(_self, bond_name);
+    bonds_table bonds(_self, _self);
     auto &bond = bonds.get(bond_name, "Unable to find bond with the provided name");
 
     eosio_assert(claim_name != 0, "Claim name is required");
@@ -77,7 +77,7 @@ void tungsten::createclaim(account_name claimer, account_name bond_name,
         bond.active_claims++;
     });
 
-    claims_table claims(_self, claim_name);
+    claims_table claims(_self, _self);
     claims.emplace(claimer, [&](claim_type &claim) {
         claim.name = claim_name;
         claim.claimer = claimer;
@@ -96,9 +96,9 @@ void tungsten::createclaim(account_name claimer, account_name bond_name,
 }
 
 void tungsten::delayclaim(account_name claim_name) {
-    claims_table claims(_self, claim_name);
+    claims_table claims(_self, _self);
     auto &claim = claims.get(claim_name, "Unable to find claim with the provided name");
-    bonds_table bonds(_self, claim.bond_name);
+    bonds_table bonds(_self, _self);
     auto &bond = bonds.get(claim.bond_name, "Unable to find bond associated with the claim");
 
     require_auth(bond.arbitrator);
@@ -111,9 +111,9 @@ void tungsten::delayclaim(account_name claim_name) {
 }
 
 void tungsten::ruleclaim(account_name claim_name, bool authorize, string details) {
-    claims_table claims(_self, claim_name);
+    claims_table claims(_self, _self);
     auto &claim = claims.get(claim_name, "Unable to find claim with the provided name");
-    bonds_table bonds(_self, claim.bond_name);
+    bonds_table bonds(_self, _self);
     auto &bond = bonds.get(claim.bond_name, "Unable to find bond associated with the claim");
 
     require_auth(bond.arbitrator);
@@ -163,9 +163,9 @@ void tungsten::ruleclaim(account_name claim_name, bool authorize, string details
 }
 
 void tungsten::closeclaim(account_name claim_name) {
-    claims_table claims(_self, claim_name);
+    claims_table claims(_self, _self);
     auto &claim = claims.get(claim_name, "Unable to find claim with the provided name");
-    bonds_table bonds(_self, claim.bond_name);
+    bonds_table bonds(_self, _self);
     auto &bond = bonds.get(claim.bond_name, "Unable to find bond associated with the claim");
 
     require_auth(claim.claimer);
