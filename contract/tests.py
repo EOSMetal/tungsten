@@ -54,11 +54,20 @@ authority = dict(
     waits=[])
 
 authority['keys'][0]['key'] = tungsten.account.active_key.key_public
-bios.push_action('updateauth', json.dumps([tungsten.account.name, 'active', 'owner', authority]), tungsten.account)
+bios.push_action(
+    'updateauth',
+    json.dumps([tungsten.account.name, 'active', 'owner', authority]),
+    tungsten.account)
 authority['keys'][0]['key'] = bonder.active_key.key_public
-bios.push_action('updateauth', json.dumps([bonder.name, 'active', 'owner', authority]), bonder)
+bios.push_action(
+    'updateauth',
+    json.dumps([bonder.name, 'active', 'owner', authority]),
+    bonder)
 authority['keys'][0]['key'] = claimer.active_key.key_public
-bios.push_action('updateauth', json.dumps([claimer.name, 'active', 'owner', authority]), claimer)
+bios.push_action(
+    'updateauth',
+    json.dumps([claimer.name, 'active', 'owner', authority]),
+    claimer)
 
 # To make the contract account privileged instead - removes the need for permissions
 # eosf.Contract(sess.eosio, 'eosio.bios').push_action(
@@ -118,3 +127,21 @@ tungsten.push_action(
 
 # Close the third claim since it has no funds left to claim from the bond
 tungsten.push_action('closeclaim', '["{}"]'.format(claim_name_3), claimer)
+
+
+def small_claim():
+    # Small claim amounts should fail
+    bond_name = 'smallbond'
+    data = '["{}", "{}", "1000.0000 SYS", "Ricardian contract", {}, "{}"]'.format(
+        bonder, bond_name, in_a_week, arbitrator)
+    tungsten.push_action('createbond', data, bonder)
+
+    claim_name = 'smallclaim'
+    data = '["{}", "{}", "{}", "0.0010 SYS", "Details of claim", "English"]'.format(
+        claimer, bond_name, claim_name)
+    tungsten.push_action('createclaim', data, claimer)
+
+    tungsten.push_action(
+        'ruleclaim',
+        '["{}", false, "Does not make sense"]'.format(claim_name),
+        arbitrator)

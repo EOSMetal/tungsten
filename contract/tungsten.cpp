@@ -67,11 +67,15 @@ void tungsten::createclaim(account_name claimer, account_name bond_name,
     auto &bond = bonds.get(bond_name, "Unable to find bond with the provided name");
 
     eosio_assert(claim_name != 0, "Claim name is required");
-    eosio_assert(amount.symbol == asset().symbol, "Claimed amount must be in the system token");
-    eosio_assert(amount.amount > 0, "Claimed amount must be greater than zero");
     eosio_assert(bond.deposit.amount > 0, "There are no funds remaining in the deposit of the bond");
     eosio_assert(details.length() > 0, "Must provide details of the claim");
     eosio_assert(language.length() > 0, "Must provide language of the details of the claim");
+
+    eosio_assert(amount.symbol == asset().symbol, "Claimed amount must be in the system token");
+    eosio_assert(amount.amount > 0, "Claim amount must be positive");
+    int64_t deposit = amount.amount * this->claim_security_deposit;
+    int64_t fee = deposit * this->arbitrator_fee;
+    eosio_assert(deposit > 0 && fee > 0, "Claim amount is too small");
 
     bonds.modify(bond, 0, [&](bond_type &bond) {
         bond.active_claims++;
@@ -90,7 +94,7 @@ void tungsten::createclaim(account_name claimer, account_name bond_name,
 
     action(permission_level{claimer, N(active)},
            N(eosio.token), N(transfer),
-           std::make_tuple(claimer, _self, asset(amount.amount * this->claim_security_deposit),
+           std::make_tuple(claimer, _self, asset(deposit),
                            string("Security deposit for claim ") + name{claim_name}.to_string()))
         .send();
 }
