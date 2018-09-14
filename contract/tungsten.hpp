@@ -8,16 +8,6 @@ using namespace eosio;
 using std::string;
 
 namespace models {
-    uint64_t string_hasher(string data) {
-        checksum256 result;
-        sha256((char *)data.c_str(), sizeof(data), &result);
-        uint64_t hash = 0;
-        for (uint8_t i = 0; i < 8; i++) {
-            hash += result.hash[i] << (8u * i);
-        }
-        return hash;
-    }
-
     //@abi table bonds i64
     struct bond_type {
         account_name name;
