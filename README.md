@@ -10,6 +10,7 @@ The claims will be evaluated by the appointed arbitrators declared upon the crea
 of the bond by its creator.
 
 ## Actions:
+
 - `createbond`
   - Parameters:
     - `creator`: User creating the bond.
@@ -97,7 +98,7 @@ for the user, but to do so it requires one of the following things:
   is done by adding `<CONTRACT_ACCOUNT>@eosio.code` as a satisfying authority of the
   `active` permission of the user's account.
 
-## Possible improvements
+## Possible improvements and ideas
 
 - Allow arbitrators to adjust the amount being requested by the claimers
   in their ruling.
@@ -113,3 +114,8 @@ for the user, but to do so it requires one of the following things:
   This registration would imply signing a ricardian contract that defines the
   principles under which they should act, and would also require them to
   create a bond as a commitment to these rules.
+- Allow bond creators to withdraw, after a bond expires, the funds that are
+  not locked under active claims.
+- Add option to put up bonds on behalf of third parties.
+- Separate bonds by type: Block Producer bonds, Arbitrator bonds, Dapp bonds,
+  and general purpose bonds. Standardize bond sizes by category.
