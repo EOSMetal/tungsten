@@ -19,7 +19,7 @@ arbitrator = eosf.account(sess.eosio)
 sess.wallet.import_key(arbitrator)
 
 # Load eosio.token contract
-token = eosf.account(sess.eosio, name="eosio.token")
+token = eosf.account(sess.eosio, name='eosio.token')
 sess.wallet.import_key(token)
 token = eosf.Contract(token, 'eosio.token')
 token.deploy()
