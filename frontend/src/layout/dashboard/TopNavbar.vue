@@ -14,27 +14,8 @@
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="ti-panel"></i>
-              <p>Stats</p>
-            </a>
-          </li>
-          <drop-down class="nav-item"
-                     title="5 Notifications"
-                     title-classes="nav-link"
-                     icon="ti-bell">
-            <a class="dropdown-item" href="#">Notification 1</a>
-            <a class="dropdown-item" href="#">Notification 2</a>
-            <a class="dropdown-item" href="#">Notification 3</a>
-            <a class="dropdown-item" href="#">Notification 4</a>
-            <a class="dropdown-item" href="#">Another notification</a>
-          </drop-down>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="ti-settings"></i>
-              <p>
-                Settings
-              </p>
+            <a href="https://eosmetal.io/" target="_blank" class="nav-link" style="padding: 4px">
+              <img src="@/assets/img/eosmetal.png" alt="EOSMetal" style="height: 30px">
             </a>
           </li>
         </ul>

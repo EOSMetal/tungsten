@@ -3,6 +3,7 @@ import DashboardLayout from "@/layout/dashboard/DashboardLayout.vue";
 import NotFound from "@/pages/NotFoundPage.vue";
 
 // Admin pages
+import Bonds from "@/pages/Bonds.vue";
 import Dashboard from "@/pages/Dashboard.vue";
 import UserProfile from "@/pages/UserProfile.vue";
 import Notifications from "@/pages/Notifications.vue";
@@ -14,12 +15,17 @@ const routes = [
   {
     path: "/",
     component: DashboardLayout,
-    redirect: "/bonds",
+    redirect: { name: "dashboard" },
     children: [
       {
         path: "dashboard",
         name: "dashboard",
         component: Dashboard
+      },
+      {
+        path: "bonds",
+        name: "bonds",
+        component: Bonds
       },
       {
         path: "stats",
@@ -45,8 +51,18 @@ const routes = [
         path: "table-list",
         name: "table-list",
         component: TableList
-      },
-      { path: "*", name: "notFound", component: NotFound }
+      }
+    ]
+  },
+  {
+    path: "*",
+    component: DashboardLayout,
+    children: [
+      {
+        path: "*",
+        name: "notFound",
+        component: NotFound
+      }
     ]
   }
 ];

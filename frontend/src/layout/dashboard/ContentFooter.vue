@@ -9,10 +9,9 @@
         </ul>
       </nav>
       <div class="copyright d-flex flex-wrap">
-        &copy; Coded with
-        <i class="fa fa-heart heart"></i> by
-        <a href="https://github.com/cristijora" target="_blank"> &nbsp; Cristi Jora.</a>&nbsp;
-        Designed by <a href="https://www.creative-tim.com/?ref=pdf-vuejs" target="_blank">&nbsp; Creative Tim.</a>
+        <a style="color: black" href="https://github.com/EOSMetal/tungsten" target="_blank">
+          <i class="fa fa-github" style="font-size: 130%"></i> Tungsten
+        </a>
       </div>
     </div>
   </footer>
