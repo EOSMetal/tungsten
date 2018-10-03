@@ -1,0 +1,83 @@
+<template>
+  <div data-collapse="medium" data-animation="default" data-duration="400" data-no-scroll="1" class="left-navigation w-nav">
+    <a href="#" class="logo-link w-nav-brand">
+      <h1 class="brand-text logo">Tungsten</h1>
+    </a>
+    <nav role="navigation" class="nav-menu w-nav-menu">
+      <div class="columns-5 w-row">
+        <div class="column-11 w-col w-col-2">
+          <img src="@/assets/images/feather-05-black.svg" width="33" alt="" class="grid-image navi-icons"/>
+        </div>
+        <div class="column-nav w-col w-col-10">
+          <router-link :to="{name: 'home'}" class="nav-link w-nav-link">Home</router-link>
+        </div>
+      </div>
+      <div class="columns-5 w-row">
+        <div class="column-11 w-col w-col-2">
+          <img src="@/assets/images/feather-05-black.svg" width="33" alt="" class="grid-image navi-icons"/>
+        </div>
+        <div class="column-nav w-col w-col-10">
+          <router-link :to="{name: 'bonds'}" class="nav-link w-nav-link">Bonds</router-link>
+        </div>
+      </div>
+      <div class="columns-5 w-row">
+        <div class="column-11 w-col w-col-2">
+          <img src="@/assets/images/feather-05-black.svg" width="33" alt="" class="grid-image navi-icons"/>
+        </div>
+        <div class="column-nav w-col w-col-10">
+          <router-link :to="{name: 'about'}" class="nav-link w-nav-link">About</router-link>
+        </div>
+      </div>
+    </nav>
+    <div class="hamburger-button w-nav-button">
+      <div class="icon w-icon-nav-menu"></div>
+    </div>
+    <div class="social-footer w-hidden-medium w-hidden-small w-hidden-tiny">
+      <a href="#Dashboard" class="footer-pair w-nav-link">
+        Pair with your
+        <img src="@/assets/images/scatter.png" width="65" alt="Scatter" class="pair"/>
+      </a>
+      <!-- <div class="columns-8 w-row">
+        <div class="w-col w-col-4">
+          <a href="#" class="sidebar-button white">Help</a>
+        </div>
+        <div class="column-5 w-col w-col-4">
+          <h2 class="sidebar-links">Privacy</h2>
+        </div>
+        <div class="column-6 w-col w-col-4">
+          <h2 class="bond-expire">Terms</h2>
+        </div>
+      </div> -->
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "Sidebar"
+};
+</script>
+
+<style scoped>
+.router-link-exact-active {
+  margin-left: 0px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-family: "Varela Round", sans-serif;
+  color: #007fd3;
+  font-weight: 800;
+  text-align: left;
+  letter-spacing: 0.35px;
+  text-transform: capitalize;
+}
+@media (max-width: 479px) {
+  .router-link-exact-active {
+    margin-left: 28px;
+    color: #0f2e4d;
+  }
+}
+.pair {
+  margin-left: 0;
+  margin-top: 12px;
+}
+</style>
