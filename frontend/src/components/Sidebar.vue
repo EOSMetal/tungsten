@@ -2,6 +2,9 @@
   <div data-collapse="medium" data-animation="default" data-duration="400" data-no-scroll="1" class="left-navigation w-nav">
     <a href="#" class="logo-link w-nav-brand">
       <h1 class="brand-text logo">Tungsten</h1>
+      <!-- <div class="credits">
+        By <img src="@/assets/images/eosmetal-logo.png" width="80px" alt="EOSMetal"/>
+      </div> -->
     </a>
     <nav role="navigation" class="nav-menu w-nav-menu">
       <div class="columns-5 w-row">
@@ -75,6 +78,14 @@ export default {
     margin-left: 28px;
     color: #0f2e4d;
   }
+}
+.credits {
+  margin-top: -18px;
+  margin-bottom: 42px;
+  margin-left: 32px;
+}
+.credits > img {
+  margin-left: 6px;
 }
 .pair {
   margin-left: 0;
