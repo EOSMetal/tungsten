@@ -36,10 +36,20 @@
       <div class="icon w-icon-nav-menu"></div>
     </div>
     <div class="social-footer w-hidden-medium w-hidden-small w-hidden-tiny">
-      <a href="#Dashboard" class="footer-pair w-nav-link">
-        Pair with your
-        <img src="@/assets/images/scatter.png" width="65" alt="Scatter" class="pair"/>
-      </a>
+      <div v-if="!account">
+        <a href="#" @click="pairScatter()" class="footer-pair w-nav-link">
+          Pair with your
+          <img src="@/assets/images/scatter.png" width="65" alt="Scatter" class="pair"/>
+        </a>
+      </div>
+      <div v-else>
+        <p>
+          Account: <strong>{{account.name}}</strong>
+        </p>
+        <div style="margin-top: 12px">
+          <a href="#" @click="logOut()" class="sidebar-button white">Log out</a>
+        </div>
+      </div>
       <!-- <div class="columns-8 w-row">
         <div class="w-col w-col-4">
           <a href="#" class="sidebar-button white">Help</a>
@@ -56,8 +66,17 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
+
 export default {
-  name: "Sidebar"
+  name: "Sidebar",
+  computed: mapState(["eos", "account"]),
+  methods: {
+    ...mapActions(["pairScatter"]),
+    logOut() {
+      this.$store.commit("setAccount", null);
+    }
+  }
 };
 </script>
 
