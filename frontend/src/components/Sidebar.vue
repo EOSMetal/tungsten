@@ -74,6 +74,7 @@ export default {
   methods: {
     ...mapActions(["pairScatter"]),
     logOut() {
+      this.$store.commit("setEos", null);
       this.$store.commit("setAccount", null);
     }
   }

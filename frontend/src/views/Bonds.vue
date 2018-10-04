@@ -8,38 +8,24 @@
               <h1 class="brand-text page-title">Dashboard</h1>
               <h2 class="page-subtitle">View your bonds here</h2>
             </div>
-            <div class="align-right w-col w-col-4"><a href="#" class="navy-button white">Create New Bond</a></div>
+            <div class="align-right w-col w-col-4">
+              <router-link :to="{name: 'createBond'}" class="navy-button white">Create New Bond</router-link>
+            </div>
           </div>
         </div>
       </section>
       <section id="Dashboard" class="section">
         <div class="container w-container">
           <div class="columns-2 w-row">
-            <div class="column-2 w-col w-col-4">
+            <div v-for="bond in bonds" :key="bond.name" class="column-4 w-col w-col-4">
               <div class="bond-block">
-                <h2 class="bond-creator">Bond Creator</h2>
-                <h2 class="bond-name-title">Bond Name</h2>
-                <h2 class="bond-value">EOS — 8400</h2>
-                <h2 class="bond-expire">XX.XX.2023</h2>
-                <h2 class="view-bond">Manage Bond</h2>
-              </div>
-            </div>
-            <div class="column-3 w-col w-col-4">
-              <div class="bond-block">
-                <h2 class="bond-creator">Bond Creator</h2>
-                <h2 class="bond-name-title">Bond Name</h2>
-                <h2 class="bond-value">EOS — 8400</h2>
-                <h2 class="bond-expire">XX.XX.2023</h2>
-                <h2 class="view-bond">Manage Bond</h2>
-              </div>
-            </div>
-            <div class="column-4 w-col w-col-4">
-              <div class="bond-block">
-                <h2 class="bond-creator">Bond Creator</h2>
-                <h2 class="bond-name-title">Bond Name</h2>
-                <h2 class="bond-value">EOS — 8400</h2>
-                <h2 class="bond-expire">XX.XX.2023</h2>
-                <h2 class="view-bond">Manage Bond</h2>
+                <h2 class="bond-creator">{{bond.creator}}</h2>
+                <h2 class="bond-name-title">{{bond.name}}</h2>
+                <h2 class="bond-value">{{bond.deposit}}</h2>
+                <h2 class="bond-expire">{{bond.expiration}}</h2>
+                <router-link :to="{name: 'viewBond', params: {name: bond.name}}" class="view-bond">
+                  Manage Bond
+                </router-link>
               </div>
             </div>
           </div>
@@ -48,3 +34,37 @@
     </div>
   </div>
 </template>
+
+<script>
+import { mapState } from "vuex";
+
+export default {
+  data() {
+    return {
+      bonds: []
+    };
+  },
+  async mounted() {
+    this.bonds = (await this.publicEos.getTableRows({
+      json: true,
+      code: "tungsten",
+      scope: "tungsten",
+      table: "bonds"
+    })).rows;
+  },
+  computed: {
+    ...mapState(["eos", "publicEos"])
+  },
+  methods: {
+    async sendTransaction() {
+      await this.eos.transfer(
+        this.account.name,
+        "eosio",
+        "1.0000 SYS",
+        "Hellooo",
+        { authorization: [`${this.account.name}@${this.account.authority}`] }
+      );
+    }
+  }
+};
+</script>

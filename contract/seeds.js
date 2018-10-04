@@ -20,8 +20,11 @@ main().catch(error => {
 async function main() {
   await createAccount("tungsten");
   await setContract("tungsten", process.cwd(), "tungsten");
+  await giveCodeActivePermission("tungsten", "tungsten");
 
   await createAccount("bonder");
+  await giveCodeActivePermission("bonder", "tungsten");
+
   await eos.transaction("eosio.token", tr => {
     tr.issue("bonder", "10000.0000 SYS", "Issue tokens", {
       authorization: "eosio.token"
@@ -46,4 +49,29 @@ async function setContract(account, contractDir, contractName) {
 
   await eos.setcode(account, 0, 0, wasm);
   await eos.setabi(account, JSON.parse(abi));
+}
+
+async function giveCodeActivePermission(account, contract) {
+  await eos.updateauth(
+    account,
+    "active",
+    "owner",
+    {
+      threshold: 1,
+      keys: [
+        {
+          key: keypair.public,
+          weight: 1
+        }
+      ],
+      accounts: [
+        {
+          permission: { actor: contract, permission: "eosio.code" },
+          weight: 1
+        }
+      ],
+      waits: []
+    },
+    { authorization: account }
+  );
 }
