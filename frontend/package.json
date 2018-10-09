@@ -19,6 +19,7 @@
     "@vue/cli-plugin-eslint": "^3.0.3",
     "@vue/cli-service": "^3.0.3",
     "@vue/eslint-config-prettier": "^3.0.4",
+    "vue-markdown-loader": "^2.4.1",
     "vue-template-compiler": "^2.5.17"
   },
   "eslintConfig": {
