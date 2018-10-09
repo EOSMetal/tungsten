@@ -2,10 +2,19 @@ body {
   height: 100%;
   padding-left: 329px;
   background-color: #edeff2;
-  font-family: Oswald, sans-serif;
+  font-family: "Droid Sans", sans-serif;
   color: rgba(0, 0, 0, 0.74);
   font-size: 16px;
   line-height: 20px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Varela Round", sans-serif;
 }
 
 h1 {
@@ -31,7 +40,6 @@ h3 {
   font-size: 18px;
   line-height: 30px;
   font-weight: 400;
-  text-transform: uppercase;
 }
 
 h4 {
