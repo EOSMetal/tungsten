@@ -4,7 +4,7 @@ import Router from "vue-router";
 import Layout from "./views/Layout.vue";
 import NotFound from "./views/NotFound.vue";
 import Home from "./views/Home.vue";
-import About from "./views/About.vue";
+import About from "./views/About.md";
 import Bonds from "./views/Bonds.vue";
 import CreateBond from "./views/CreateBond.vue";
 import ViewBond from "./views/ViewBond.vue";
