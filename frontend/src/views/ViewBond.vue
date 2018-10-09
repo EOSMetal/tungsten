@@ -7,13 +7,24 @@
             <h1 class="brand-text page-title">Examine Bond</h1>
             <h2 class="page-subtitle">Review the bond details below</h2>
           </div>
-          <div class="align-right w-col w-col-4"><a href="#" class="navy-button white">File New Claim</a></div>
+          <div v-if="!loadingBond && bond" class="align-right w-col w-col-4">
+            <router-link :to="{name: 'createClaim', params: {bondName: bond.name}}" class="navy-button white">
+              File New Claim
+            </router-link>
+          </div>
         </div>
       </div>
     </section>
     <section id="Dashboard" class="section">
       <div class="w-container">
-        <div class="w-row">
+        <div v-if="loadingBond" class="w-row">
+          <h2 class="bond-name">Loading...</h2>
+        </div>
+        <div v-else-if="!bond" class="w-row">
+          <h2 class="bond-name"><span style="color: black">Bond not found:</span> {{$route.params.name}}</h2>
+          <p>The bond you are looking for does not currently exist. Please check the URL is corrent.</p>
+        </div>
+        <div v-else class="w-row">
           <div class="w-col w-col-8">
             <h2 class="bond-name"><span style="color: black">Name:</span> {{bond.name}}</h2>
             <div class="bond-form-block">
@@ -70,23 +81,11 @@
 import { mapState } from "vuex";
 
 export default {
-  data() {
-    return {
-      bond: {}
-    };
-  },
   computed: {
-    ...mapState(["publicEos"])
+    ...mapState(["bond", "loadingBond"])
   },
   async mounted() {
-    this.bond = (await this.publicEos.getTableRows({
-      json: true,
-      code: "tungsten",
-      scope: "tungsten",
-      table: "bonds",
-      lower_bound: this.$route.params.name,
-      limit: 1
-    })).rows[0];
+    await this.$store.dispatch("loadBond", this.$route.params.name);
   }
 };
 </script>

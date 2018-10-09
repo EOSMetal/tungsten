@@ -8,19 +8,30 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    publicEos: eosjs({
+    eos: eosjs({
       chainId:
         "cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f"
     }),
-    eos: null,
-    account: null
+    scatterEos: null,
+    account: null,
+    bond: null,
+    loadingBond: true
   },
   mutations: {
-    setEos(state, eos) {
-      state.eos = eos;
+    setScatterEos(state, eos) {
+      state.scatterEos = eos;
     },
     setAccount(state, account) {
       state.account = account;
+    },
+    setBond(state, bond) {
+      state.bond = bond;
+    },
+    startLoadingBond(state) {
+      state.loadingBond = true;
+    },
+    finishLoadingBond(state) {
+      state.loadingBond = false;
     }
   },
   actions: {
@@ -45,7 +56,23 @@ export default new Vuex.Store({
       commit("setAccount", account);
 
       const eos = scatter.eos(network, eosjs, { expireInSeconds: 60 });
-      commit("setEos", eos);
+      commit("setScatterEos", eos);
+    },
+    async loadBond({ state, commit }, bondName) {
+      commit("startLoadingBond");
+      commit("setBond", null);
+      const bond = (await state.eos.getTableRows({
+        json: true,
+        code: "tungsten",
+        scope: "tungsten",
+        table: "bonds",
+        lower_bound: bondName,
+        limit: 1
+      })).rows[0];
+      if (bond && bond.name === bondName) {
+        commit("setBond", bond);
+      }
+      commit("finishLoadingBond");
     }
   }
 });

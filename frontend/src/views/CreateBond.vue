@@ -5,7 +5,7 @@
         <div class="w-row">
           <div class="column w-col w-col-8">
             <h1 class="brand-text page-title">Create a new Bond</h1>
-            <h2 v-if="eos" class="page-subtitle">Submit the form below</h2>
+            <h2 v-if="scatterEos" class="page-subtitle">Submit the form below</h2>
             <h2 v-else class="page-subtitle">
               Please pair your Scatter in order to create a bond
             </h2>
@@ -15,7 +15,7 @@
     </section>
     <section id="Dashboard" class="section">
       <div class="container-4 w-container">
-        <div v-if="eos" class="w-row">
+        <div v-if="scatterEos" class="w-row">
           <div class="w-col w-col-8">
             <div class="bond-form-block">
               <div class="w-row">
@@ -71,11 +71,11 @@ export default {
     };
   },
   computed: {
-    ...mapState(["eos", "account"])
+    ...mapState(["scatterEos", "account"])
   },
   methods: {
     async submit() {
-      await this.eos.transaction("tungsten", tr => {
+      await this.scatterEos.transaction("tungsten", tr => {
         tr.createbond(
           this.account.name,
           this.bond.name,

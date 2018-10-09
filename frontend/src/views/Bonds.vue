@@ -45,7 +45,7 @@ export default {
     };
   },
   async mounted() {
-    this.bonds = (await this.publicEos.getTableRows({
+    this.bonds = (await this.eos.getTableRows({
       json: true,
       code: "tungsten",
       scope: "tungsten",
@@ -53,18 +53,7 @@ export default {
     })).rows;
   },
   computed: {
-    ...mapState(["eos", "publicEos"])
-  },
-  methods: {
-    async sendTransaction() {
-      await this.eos.transfer(
-        this.account.name,
-        "eosio",
-        "1.0000 SYS",
-        "Hellooo",
-        { authorization: [`${this.account.name}@${this.account.authority}`] }
-      );
-    }
+    ...mapState(["eos"])
   }
 };
 </script>
