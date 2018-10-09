@@ -8,6 +8,8 @@ import About from "./views/About.vue";
 import Bonds from "./views/Bonds.vue";
 import CreateBond from "./views/CreateBond.vue";
 import ViewBond from "./views/ViewBond.vue";
+import CreateClaim from "./views/CreateClaim.vue";
+import ViewClaim from "./views/ViewClaim.vue";
 
 Vue.use(Router);
 
@@ -44,6 +46,16 @@ export default new Router({
           path: "bonds/:name",
           name: "viewBond",
           component: ViewBond
+        },
+        {
+          path: "bonds/:bondName/claim",
+          name: "createClaim",
+          component: CreateClaim
+        },
+        {
+          path: "claims/:name",
+          name: "viewClaim",
+          component: ViewClaim
         }
       ]
     },
