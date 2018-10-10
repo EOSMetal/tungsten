@@ -7,8 +7,6 @@
             <h1 class="brand-text page-title">Create a new Claim</h1>
             <h2 class="page-subtitle">Submit the form below</h2>
           </div>
-          <div class="align-right w-col w-col-4"><img src="images/EOSMetalLogonew.png" width="129" srcset="images/EOSMetalLogonew-p-500.png 500w, images/EOSMetalLogonew-p-800.png 800w, images/EOSMetalLogonew-p-1080.png 1080w, images/EOSMetalLogonew.png 1280w"
-              sizes="129px" alt=""></div>
         </div>
       </div>
     </section>
@@ -65,3 +63,46 @@
     </section>
   </div>
 </template>
+
+<script>
+import { mapState } from "vuex";
+
+export default {
+  data() {
+    return {
+      claim: {
+        bondName: this.$route.params.bondName,
+        name: null,
+        deposit: null,
+        ricardian: null,
+        expiration: null,
+        arbitrator: null
+      }
+    };
+  },
+  computed: {
+    ...mapState(["scatterEos", "account", "bond", "loadingBond"])
+  },
+  async mounted() {
+    await this.$store.dispatch("loadBond", this.$route.params.name);
+  },
+  methods: {
+    async submit() {
+      await this.scatterEos.transaction("tungsten", tr => {
+        tr.createbond(
+          this.account.name,
+          this.bond.name,
+          this.bond.deposit,
+          this.bond.ricardian,
+          this.bond.expiration,
+          this.bond.arbitrator,
+          {
+            authorization: [`${this.account.name}@${this.account.authority}`]
+          }
+        );
+      });
+      this.$router.push({ name: "bonds" });
+    }
+  }
+};
+</script>
