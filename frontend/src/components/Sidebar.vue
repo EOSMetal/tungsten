@@ -2,35 +2,41 @@
   <div data-collapse="medium" data-animation="default" data-duration="400" data-no-scroll="1" class="left-navigation w-nav">
     <a href="#" class="logo-link w-nav-brand">
       <h1 class="brand-text logo">Tungsten</h1>
-      <!-- <div class="credits">
+      <div class="credits">
         By <img src="@/assets/images/eosmetal-logo.png" width="80px" alt="EOSMetal"/>
-      </div> -->
+      </div>
     </a>
     <nav role="navigation" class="nav-menu w-nav-menu">
-      <div class="columns-5 w-row">
-        <div class="column-11 w-col w-col-2">
-          <img src="@/assets/images/feather-05-black.svg" width="33" alt="" class="grid-image navi-icons"/>
+      <router-link :to="{name: 'home'}" class="nav-link w-nav-link">
+        <div class="columns-5 w-row">
+          <div class="column-11 w-col w-col-2">
+            <fa-icon icon="home" size="2x" class="nav-icon"/>
+          </div>
+          <div class="column-nav w-col w-col-10">
+            Home
+          </div>
         </div>
-        <div class="column-nav w-col w-col-10">
-          <router-link :to="{name: 'home'}" class="nav-link w-nav-link">Home</router-link>
+      </router-link>
+      <router-link :to="{name: 'bonds'}" class="nav-link w-nav-link">
+        <div class="columns-5 w-row">
+          <div class="column-11 w-col w-col-2">
+            <fa-icon icon="link" size="2x" class="nav-icon"/>
+          </div>
+          <div class="column-nav w-col w-col-10">
+            Bonds
+          </div>
         </div>
-      </div>
-      <div class="columns-5 w-row">
-        <div class="column-11 w-col w-col-2">
-          <img src="@/assets/images/feather-05-black.svg" width="33" alt="" class="grid-image navi-icons"/>
+      </router-link>
+      <router-link :to="{name: 'about'}" class="nav-link w-nav-link">
+        <div class="columns-5 w-row">
+          <div class="column-11 w-col w-col-2">
+            <fa-icon icon="question-circle" size="2x" class="nav-icon"/>
+          </div>
+          <div class="column-nav w-col w-col-10">
+            About
+          </div>
         </div>
-        <div class="column-nav w-col w-col-10">
-          <router-link :to="{name: 'bonds'}" class="nav-link w-nav-link">Bonds</router-link>
-        </div>
-      </div>
-      <div class="columns-5 w-row">
-        <div class="column-11 w-col w-col-2">
-          <img src="@/assets/images/feather-05-black.svg" width="33" alt="" class="grid-image navi-icons"/>
-        </div>
-        <div class="column-nav w-col w-col-10">
-          <router-link :to="{name: 'about'}" class="nav-link w-nav-link">About</router-link>
-        </div>
-      </div>
+      </router-link>
     </nav>
     <div class="hamburger-button w-nav-button">
       <div class="icon w-icon-nav-menu"></div>
@@ -106,6 +112,13 @@ export default {
 }
 .credits > img {
   margin-left: 6px;
+}
+.nav-icon {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+.column-nav {
+  margin-top: 12px;
 }
 .pair {
   margin-left: 0;
