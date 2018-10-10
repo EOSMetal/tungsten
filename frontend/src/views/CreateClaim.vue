@@ -21,41 +21,37 @@
                   <h2 class="contract-answer bond-p">Lorem ipsum dolor sit amet et delectus accommodare his consul
                     copiosae legendos at vix ad putent delectus delicata usu. Vidit dissentiet eos cu eum an brute.</h2>
                 </div>
-                <div class="w-col w-col-3"></div>
               </div>
               <div class="w-form">
-                <form id="email-form" name="email-form" data-name="Email Form" class="form w-clearfix">
-                  <div class="w-clearfix"><label for="Bond-Name" class="bond-label-form">Bond Name</label><input type="text"
-                      class="text-field w-input" maxlength="256" name="Deposit-Amount-3" data-name="Deposit Amount 3"
-                      id="Deposit-Amount-3" required=""><label for="Deposit-Amount" class="bond-label-form">Claim Name</label></div><input
-                    type="text" class="text-field w-input" maxlength="256" name="Deposit-Amount-2" data-name="Deposit Amount 2"
-                    id="Deposit-Amount-2" required=""><label for="Deposit-Amount" class="bond-label-form">Claimed
-                    Amount</label><input type="text" class="text-field w-input" maxlength="256" name="Bond-Name-2"
-                    data-name="Bond Name 2" id="Bond-Name-2"><label for="Language" class="bond-label-form">Language</label><select
-                    id="Language" name="Language" data-name="Language" class="text-field w-select">
+                <form id="email-form" class="form w-clearfix">
+                  <label for="bondName" class="bond-label-form">Bond Name</label>
+                  <input v-model="claim.bondName" disabled type="text" class="text-field w-input"
+                    maxlength="12" id="bondName" required/>
+                  <label for="name" class="bond-label-form">Claim Name</label>
+                  <input v-model="claim.name" type="text" class="text-field w-input" maxlength="12" id="name" required/>
+                  <label for="amount" class="bond-label-form">Claimed Amount</label>
+                  <input v-model="claim.amount" type="text" class="text-field w-input" maxlength="256" id="amount" required/>
+                  <label for="language" class="bond-label-form">Language of the Claim Details</label>
+                  <input v-model="claim.language" type="text" class="text-field w-input" maxlength="64" id="language" required/>
+                  <!-- <select id="language" class="text-field w-select" required>
                     <option value="">Select one...</option>
                     <option value="First">First Choice</option>
                     <option value="Second">Second Choice</option>
                     <option value="Third">Third Choice</option>
-                  </select>
-                  <div></div><label for="Bond-Name" class="bond-label-form">Claim Details</label><textarea id="field"
-                    name="field" maxlength="5000" data-name="Field" class="textarea w-input"></textarea><input type="submit"
-                    value="Submit Claim" data-wait="Please wait..." class="navy-button submit-light w-button">
+                  </select> -->
+                  <label for="details" class="bond-label-form">Claim Details</label>
+                  <textarea v-model="claim.details" id="details" maxlength="5000" class="textarea w-input"></textarea>
+                  <input type="submit" value="Submit Claim" class="navy-button submit-light w-button"/>
                 </form>
-                <div class="w-form-done">
-                  <div>Thank you! Your submission has been received!</div>
-                </div>
-                <div class="w-form-fail">
-                  <div>Oops! Something went wrong while submitting the form.</div>
-                </div>
               </div>
             </div>
           </div>
           <div class="w-col w-col-4">
             <h1 class="brand-text claim-name form-left">Helpful Links</h1>
             <div class="active-claims-block">
-              <h2 class="active-bond"><strong>Claim</strong></h2>
-              <h2 class="active-bond"><strong>Claim</strong></h2>
+              <router-link :to="{name: 'about'}">
+                <h2 class="active-bond"><strong>About Bonds and Claims</strong></h2>
+              </router-link>
             </div>
           </div>
         </div>
@@ -73,10 +69,9 @@ export default {
       claim: {
         bondName: this.$route.params.bondName,
         name: null,
-        deposit: null,
-        ricardian: null,
-        expiration: null,
-        arbitrator: null
+        amount: null,
+        language: null,
+        details: null
       }
     };
   },
@@ -91,17 +86,20 @@ export default {
       await this.scatterEos.transaction("tungsten", tr => {
         tr.createbond(
           this.account.name,
-          this.bond.name,
-          this.bond.deposit,
-          this.bond.ricardian,
-          this.bond.expiration,
-          this.bond.arbitrator,
+          this.claim.bondName,
+          this.claim.name,
+          this.claim.amount,
+          this.claim.details,
+          this.claim.language,
           {
             authorization: [`${this.account.name}@${this.account.authority}`]
           }
         );
       });
-      this.$router.push({ name: "bonds" });
+      this.$router.push({
+        name: "viewClaim",
+        params: { name: this.claim.name }
+      });
     }
   }
 };
