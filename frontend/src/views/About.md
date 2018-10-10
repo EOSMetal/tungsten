@@ -13,7 +13,11 @@ The bond acts like escrow and could help with establishing trust within the comm
 
 Discussion with CostacryptoRica around the implementation of Tungsten and the future!
 
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/LCjOMO0f_6E?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<div class="video-wrapper">
+  <div class="aspect-ratio">
+    <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/LCjOMO0f_6E?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+</div>
 
 ## Road Ahead!
 
@@ -81,5 +85,21 @@ We are a Block Producer candidate for #EOSIO software and uses best in class inf
 <style scoped>
 .content-frame {
   padding: 36px;
+}
+.video-wrapper {
+  max-width: 560px;
+}
+.aspect-ratio {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56%;
+}
+.aspect-ratio iframe {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
 }
 </style>
