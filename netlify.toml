@@ -7,3 +7,9 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+[[redirects]]
+  from = "https://tungsten.netlify.com/*"
+  to = "https://tungsten.eosmetal.io/:splat"
+  status = 301
+  force = true
