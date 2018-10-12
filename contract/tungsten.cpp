@@ -5,7 +5,7 @@ void tungsten::createbond(account_name creator, account_name bond_name, asset de
     require_auth(creator);
 
     eosio_assert(bond_name != 0, "Bond name is required");
-    eosio_assert(deposit.symbol == S(4, EOS), "Deposit must be in the system token");
+    eosio_assert(deposit.symbol == S(4, EOS), "Deposit must be in the system token and with the same precision");
     eosio_assert(deposit.amount > 0, "Deposit amount must be greater than zero");
     eosio_assert(ricardian.length() > 0, "Ricardian contract is required");
     eosio_assert(expiration > now(), "Expiration date must be in the future");
@@ -71,7 +71,7 @@ void tungsten::createclaim(account_name claimer, account_name bond_name,
     eosio_assert(details.length() > 0, "Must provide details of the claim");
     eosio_assert(language.length() > 0, "Must provide language of the details of the claim");
 
-    eosio_assert(amount.symbol == S(4, EOS), "Claimed amount must be in the system token");
+    eosio_assert(amount.symbol == S(4, EOS), "Deposit must be in the system token and with the same precision");
     eosio_assert(amount.amount > 0, "Claim amount must be positive");
     int64_t deposit = amount.amount * this->claim_security_deposit;
     int64_t fee = deposit * this->arbitrator_fee;
