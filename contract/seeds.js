@@ -18,15 +18,15 @@ main().catch(error => {
 });
 
 async function main() {
-  await createAccount("tungsten");
-  await setContract("tungsten", process.cwd(), "tungsten");
-  await giveCodeActivePermission("tungsten", "tungsten");
+  await createAccount("tungstenbond");
+  await setContract("tungstenbond", process.cwd(), "tungsten");
+  await giveCodeActivePermission("tungstenbond", "tungstenbond");
 
   await createAccount("bonder");
-  await giveCodeActivePermission("bonder", "tungsten");
+  await giveCodeActivePermission("bonder", "tungstenbond");
 
   await eos.transaction("eosio.token", tr => {
-    tr.issue("bonder", "10000.0000 SYS", "Issue tokens", {
+    tr.issue("bonder", "100000.0000 EOS", "Issue tokens", {
       authorization: "eosio.token"
     });
   });

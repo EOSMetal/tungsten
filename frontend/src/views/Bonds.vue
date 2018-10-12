@@ -42,16 +42,16 @@ export default {
       bonds: []
     };
   },
+  computed: {
+    ...mapState(["eos", "config"])
+  },
   async mounted() {
     this.bonds = (await this.eos.getTableRows({
       json: true,
-      code: "tungsten",
-      scope: "tungsten",
+      code: this.config.contractAccount,
+      scope: this.config.contractAccount,
       table: "bonds"
     })).rows;
-  },
-  computed: {
-    ...mapState(["eos"])
   }
 };
 </script>

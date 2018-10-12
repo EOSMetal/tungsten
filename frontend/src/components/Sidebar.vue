@@ -55,6 +55,9 @@
         <div style="margin-top: 12px">
           <a href="#" @click="logOut()" class="sidebar-button white">Log out</a>
         </div>
+        <div style="margin-top: 12px">
+          <a href="#" @click="grantPermission()" class="sidebar-button white">Grant Permission</a>
+        </div>
       </div>
       <!-- <div class="columns-8 w-row">
         <div class="w-col w-col-4">
@@ -78,11 +81,7 @@ export default {
   name: "Sidebar",
   computed: mapState(["eos", "account"]),
   methods: {
-    ...mapActions(["pairScatter"]),
-    logOut() {
-      this.$store.commit("setEos", null);
-      this.$store.commit("setAccount", null);
-    }
+    ...mapActions(["pairScatter", "logOut", "grantPermission"])
   }
 };
 </script>

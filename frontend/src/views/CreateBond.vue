@@ -71,11 +71,11 @@ export default {
     };
   },
   computed: {
-    ...mapState(["scatterEos", "account"])
+    ...mapState(["scatterEos", "account", "config"])
   },
   methods: {
     async submit() {
-      await this.scatterEos.transaction("tungsten", tr => {
+      await this.scatterEos.transaction(this.config.contractAccount, tr => {
         tr.createbond(
           this.account.name,
           this.bond.name,
@@ -88,7 +88,7 @@ export default {
           }
         );
       });
-      this.$router.push({ name: "bonds" });
+      this.$router.push({ name: "viewBond", params: { name: this.bond.name } });
     }
   }
 };
