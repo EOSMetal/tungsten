@@ -49,7 +49,7 @@
                   <h2 class="bond-info">Expiry Date</h2>
                 </div>
                 <div class="column-14 w-col w-col-9 w-col-tiny-6">
-                  <h2 class="bond-answer"><strong>{{bond.expiration}}</strong></h2>
+                  <h2 class="bond-answer"><strong>{{bond.expiration | date}}</strong></h2>
                 </div>
               </div>
               <h2 class="bond-remaining">Deposit Remaining</h2>
@@ -79,10 +79,14 @@
 
 <script>
 import { mapState } from "vuex";
+import moment from "moment";
 
 export default {
   computed: {
     ...mapState(["bond", "loadingBond"])
+  },
+  filters: {
+    date: ts => moment(parseInt(ts)).fromNow()
   },
   async mounted() {
     await this.$store.dispatch("loadBond", this.$route.params.name);
