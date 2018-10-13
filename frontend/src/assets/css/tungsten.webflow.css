@@ -73,6 +73,10 @@ p {
   font-size: 15px;
 }
 
+a {
+  color: #007fd3;
+}
+
 .button {
   display: inline-block;
   padding: 12px 20px;
@@ -101,10 +105,6 @@ p {
 }
 
 .brand-text {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
   margin-top: 0px;
   margin-bottom: 0px;
   padding-bottom: 0px;
@@ -433,15 +433,6 @@ p {
   text-align: left;
 }
 
-.social-footer {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  margin-bottom: 40px;
-  text-align: center;
-}
-
 .grid-fours {
   width: 25%;
   padding: 10px;
@@ -478,13 +469,6 @@ p {
 
 .paragraph-form {
   margin-bottom: 0px;
-}
-
-.pair {
-  display: block;
-  width: 131px;
-  margin-bottom: 40px;
-  margin-left: 45px;
 }
 
 .footer-pair {
@@ -1293,7 +1277,7 @@ html.w-mod-js *[data-ix="scale-on-scroll"] {
     bottom: auto;
     width: 100%;
     height: auto;
-    padding-top: 3%;
+    padding-top: 25px;
     padding-left: 30px;
     float: none;
   }
@@ -1312,10 +1296,6 @@ html.w-mod-js *[data-ix="scale-on-scroll"] {
     margin-bottom: 0px;
     margin-left: 10px;
     float: left;
-  }
-  .social-footer {
-    position: absolute;
-    display: inline-block;
   }
   .banner {
     height: 500px;
@@ -1342,9 +1322,6 @@ html.w-mod-js *[data-ix="scale-on-scroll"] {
     -webkit-align-items: flex-start;
     -ms-flex-align: start;
     align-items: flex-start;
-  }
-  .column-nav {
-    left: -83px;
   }
 }
 
@@ -1382,10 +1359,6 @@ html.w-mod-js *[data-ix="scale-on-scroll"] {
   .nav-link {
     margin-left: 28px;
   }
-  .nav-menu {
-    padding-bottom: 20px;
-    background-color: #007fd3;
-  }
   .grid-fours {
     width: 33.333%;
   }
@@ -1399,9 +1372,6 @@ html.w-mod-js *[data-ix="scale-on-scroll"] {
   }
   .column-11 {
     max-height: 1px;
-  }
-  .column-nav {
-    left: 0px;
   }
   .page-subtitle {
     margin-bottom: 21px;
@@ -1465,12 +1435,6 @@ html.w-mod-js *[data-ix="scale-on-scroll"] {
   .nav-link.w--current {
     margin-left: 28px;
     color: #0f2e4d;
-  }
-  .nav-menu {
-    margin-top: 0px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    background-color: #007fd3;
   }
   .banner {
     height: 450px;
@@ -1542,11 +1506,6 @@ html.w-mod-js *[data-ix="scale-on-scroll"] {
   }
   .column-11 {
     max-height: 2px;
-  }
-  .column-nav {
-    margin-top: 0px;
-    margin-bottom: 8px;
-    padding-top: 0px;
   }
   .container-3 {
     clear: none;
