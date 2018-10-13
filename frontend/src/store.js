@@ -12,8 +12,8 @@ const network = {
   },
   jungle: {
     protocol: "https",
-    host: "api.jungle.alohaeos.com",
-    port: 443,
+    host: "jungle.eosmetal.io",
+    port: 18889,
     chainId: "038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca"
   }
 }[process.env.VUE_APP_EOSIO_NETWORK || "local"];
