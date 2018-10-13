@@ -7,7 +7,6 @@
             <h1 class="brand-text page-title">View your Claim</h1>
             <h2 class="page-subtitle">Manage your claim below</h2>
           </div>
-          <div class="align-right w-col w-col-4"><a href="#" class="navy-button white">File New Claim</a></div>
         </div>
       </div>
     </section>
