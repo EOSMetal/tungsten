@@ -49,7 +49,12 @@
                   <h2 class="bond-info">Expiry Date</h2>
                 </div>
                 <div class="column-14 w-col w-col-9 w-col-tiny-6">
-                  <h2 class="bond-answer"><strong>{{bond.expiration | dateFromNow}}</strong></h2>
+                  <h2 class="bond-answer">
+                    <strong>{{bond.expiration | dateFromNow}} </strong>
+                    <a v-if="account && account.name === bond.creator" href="#" @click.prevent="showExtendModal()">
+                      (Extend)
+                    </a>
+                  </h2>
                 </div>
               </div>
               <h2 class="bond-remaining">Deposit Remaining</h2>
@@ -80,6 +85,7 @@
 
 <script>
 import { mapState } from "vuex";
+import RenewBond from "./RenewBond";
 
 export default {
   data() {
@@ -88,7 +94,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["bond", "loadingBond", "config"])
+    ...mapState(["bond", "loadingBond", "config", "account"])
   },
   async mounted() {
     const [, { rows }] = await Promise.all([
@@ -101,6 +107,11 @@ export default {
       })
     ]);
     this.claims = rows;
+  },
+  methods: {
+    showExtendModal() {
+      this.$modal.show(RenewBond, { bond: this.bond });
+    }
   }
 };
 </script>

@@ -235,6 +235,20 @@ export default new Vuex.Store({
           text: eos.extractErrorMessage(error)
         });
       }
+    },
+    async renewBond({ state, commit }, { bond, expiration }) {
+      try {
+        await eos.scatter.transaction(state.config.contractAccount, tr => {
+          tr.renewbond(bond.name, expiration);
+        });
+        commit("setBond", { ...bond, expiration });
+      } catch (error) {
+        Vue.notify({
+          type: "error",
+          title: "Error",
+          text: eos.extractErrorMessage(error)
+        });
+      }
     }
   }
 });
