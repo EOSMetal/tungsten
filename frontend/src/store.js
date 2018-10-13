@@ -40,7 +40,9 @@ export default new Vuex.Store({
     },
     account: null,
     bond: null,
-    loadingBond: true
+    loadingBond: true,
+    claim: null,
+    loadingClaim: true
   },
   mutations: {
     setAccount(state, account) {
@@ -54,6 +56,15 @@ export default new Vuex.Store({
     },
     finishLoadingBond(state) {
       state.loadingBond = false;
+    },
+    setClaim(state, claim) {
+      state.claim = claim;
+    },
+    startLoadingClaim(state) {
+      state.loadingClaim = true;
+    },
+    finishLoadingClaim(state) {
+      state.loadingClaim = false;
     }
   },
   actions: {
@@ -94,6 +105,22 @@ export default new Vuex.Store({
         commit("setBond", bond);
       }
       commit("finishLoadingBond");
+    },
+    async loadClaim({ state, commit }, claimName) {
+      commit("startLoadingClaim");
+      commit("setClaim", null);
+      const claim = (await eos.getTableRows({
+        json: true,
+        code: state.config.contractAccount,
+        scope: state.config.contractAccount,
+        table: "claims",
+        lower_bound: claimName,
+        limit: 1
+      })).rows[0];
+      if (claim && claim.name === claimName) {
+        commit("setClaim", claim);
+      }
+      commit("finishLoadingClaim");
     },
     async grantPermission({ state }) {
       const accountInfo = await eos.getAccount({

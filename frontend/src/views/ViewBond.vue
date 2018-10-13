@@ -62,7 +62,13 @@
             <h1 class="brand-text claim-name">Active Claims:</h1>
             <div v-for="claim in claims" :key="claim.name" class="active-claims-block">
               <h2 class="active-bond"><strong>{{claim.claimer}}</strong></h2>
-              <h2 class="active-bond-claim-name"><strong class="bold-text">{{claim.name}}</strong></h2>
+              <h2 class="active-bond-claim-name">
+                <router-link :to="{name: 'viewClaim', params: {name: claim.name}}" class="view-claim">
+                  <strong class="bold-text">
+                    {{claim.name}}
+                  </strong>
+                </router-link>
+              </h2>
               <h2 class="active-bond-price" style="font-size: 160%">{{claim.amount}}</h2>
             </div>
           </div>
@@ -98,3 +104,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.view-claim {
+  color: white;
+}
+</style>

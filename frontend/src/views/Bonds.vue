@@ -19,12 +19,13 @@
           <div v-for="bond in bonds" :key="bond.name" class="column-4 w-col w-col-4">
             <div class="bond-block">
               <h2 class="bond-creator">{{bond.creator}}</h2>
-              <h2 class="bond-name-title">{{bond.name}}</h2>
+              <h2 class="bond-name-title">
+                <router-link :to="{name: 'viewBond', params: {name: bond.name}}" class="view-bond">
+                  {{bond.name}}
+                </router-link>
+              </h2>
               <h2 class="bond-value">{{bond.deposit}}</h2>
               <h2 class="bond-expire">{{bond.expiration | dateFromNow}}</h2>
-              <router-link :to="{name: 'viewBond', params: {name: bond.name}}" class="view-bond">
-                Manage Bond
-              </router-link>
             </div>
           </div>
         </div>
