@@ -39,6 +39,8 @@ export default new Vuex.Store({
       contractAccount: process.env.VUE_APP_CONTRACT_ACCOUNT || "tungstenbond"
     },
     account: null,
+    activeAuthority: null,
+    loadingActiveAuthority: true,
     bond: null,
     loadingBond: true,
     claim: null,
@@ -48,27 +50,44 @@ export default new Vuex.Store({
     setAccount(state, account) {
       state.account = account;
     },
+    setActiveAuthority(state, authority) {
+      state.activeAuthority = authority;
+    },
+    setLoadingActiveAuthority(state, loading) {
+      state.loadingActiveAuthority = loading;
+    },
     setBond(state, bond) {
       state.bond = bond;
     },
-    startLoadingBond(state) {
-      state.loadingBond = true;
-    },
-    finishLoadingBond(state) {
-      state.loadingBond = false;
+    setLoadingBond(state, loading) {
+      state.loadingBond = loading;
     },
     setClaim(state, claim) {
       state.claim = claim;
     },
-    startLoadingClaim(state) {
-      state.loadingClaim = true;
+    setLoadingClaim(state, loading) {
+      state.loadingClaim = loading;
+    }
+  },
+  getters: {
+    activeAuthorityContractEntry(state) {
+      return !state.activeAuthority
+        ? undefined
+        : state.activeAuthority.accounts.find(
+            a =>
+              a.permission.actor === state.config.contractAccount &&
+              a.permission.permission === "eosio.code"
+          );
     },
-    finishLoadingClaim(state) {
-      state.loadingClaim = false;
+    hasGrantedPermission(state, getters) {
+      const contractEntry = getters.activeAuthorityContractEntry;
+      return (
+        contractEntry && contractEntry.weight >= state.activeAuthority.threshold
+      );
     }
   },
   actions: {
-    async pairScatter({ state, commit }) {
+    async pairScatter({ state, commit, dispatch }) {
       const network = { blockchain: "eos", ...state.config.network };
 
       const connected = await ScatterJS.scatter.connect("Tungsten");
@@ -85,13 +104,27 @@ export default new Vuex.Store({
         authorization: `${account.name}@${account.authority}`,
         expireInSeconds: 60
       });
+
+      await dispatch("loadActiveAuthority");
+    },
+    async loadActiveAuthority({ state, commit }) {
+      commit("setLoadingActiveAuthority", true);
+      commit("setActiveAuthority", null);
+      const accountInfo = await eos.getAccount({
+        account_name: state.account.name
+      });
+      const authority = accountInfo.permissions.find(
+        p => p.perm_name === "active"
+      ).required_auth;
+      commit("setActiveAuthority", authority);
+      commit("setLoadingActiveAuthority", false);
     },
     logOut({ commit }) {
       eos.scatter = null;
       commit("setAccount", null);
     },
     async loadBond({ state, commit }, bondName) {
-      commit("startLoadingBond");
+      commit("setLoadingBond", true);
       commit("setBond", null);
       const bond = (await eos.getTableRows({
         json: true,
@@ -104,10 +137,10 @@ export default new Vuex.Store({
       if (bond && bond.name === bondName) {
         commit("setBond", bond);
       }
-      commit("finishLoadingBond");
+      commit("setLoadingBond", false);
     },
     async loadClaim({ state, commit }, claimName) {
-      commit("startLoadingClaim");
+      commit("setLoadingClaim", true);
       commit("setClaim", null);
       const claim = (await eos.getTableRows({
         json: true,
@@ -120,28 +153,58 @@ export default new Vuex.Store({
       if (claim && claim.name === claimName) {
         commit("setClaim", claim);
       }
-      commit("finishLoadingClaim");
+      commit("setLoadingClaim", false);
     },
-    async grantPermission({ state }) {
-      const accountInfo = await eos.getAccount({
-        account_name: state.account.name
-      });
-      const authority = accountInfo.permissions.find(
-        p => p.perm_name === "active"
-      ).required_auth;
-      authority.accounts.push({
-        permission: {
-          actor: state.config.contractAccount,
-          permission: "eosio.code"
-        },
-        weight: authority.threshold
-      });
+    async grantPermission({ state, dispatch, getters }) {
+      // Ensure we have a fresh copy
+      await dispatch("loadActiveAuthority");
+      const authority = { ...state.activeAuthority };
+      const contractEntry = getters.activeAuthorityContractEntry;
+
+      if (contractEntry) {
+        authority.accounts = [
+          ...authority.accounts.filter(a => a !== contractEntry),
+          {
+            ...contractEntry,
+            weight: authority.threshold
+          }
+        ];
+      } else {
+        authority.accounts = [
+          ...authority.accounts,
+          {
+            permission: {
+              actor: state.config.contractAccount,
+              permission: "eosio.code"
+            },
+            weight: authority.threshold
+          }
+        ];
+      }
+
       await eos.scatter.updateauth(
         state.account.name,
         "active",
         "owner",
         authority
       );
+      await dispatch("loadActiveAuthority");
+    },
+    async removePermission({ state, dispatch, getters }) {
+      const authority = {
+        ...state.activeAuthority,
+        accounts: state.activeAuthority.accounts.filter(
+          a => a !== getters.activeAuthorityContractEntry
+        )
+      };
+
+      await eos.scatter.updateauth(
+        state.account.name,
+        "active",
+        "owner",
+        authority
+      );
+      await dispatch("loadActiveAuthority");
     }
   }
 });

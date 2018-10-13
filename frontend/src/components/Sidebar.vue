@@ -52,11 +52,12 @@
         <p>
           Account: <strong>{{account.name}}</strong>
         </p>
-        <div style="margin-top: 12px">
-          <a href="#" @click="logOut()" class="sidebar-button white">Log out</a>
+        <div v-if="!loadingActiveAuthority" style="margin-top: 12px">
+          <a v-if="!hasGrantedPermission" href="#" @click="grantPermission()" class="sidebar-button white">Grant Permission</a>
+          <a v-else href="#" @click="removePermission()" class="sidebar-button white">Remove Permission</a>
         </div>
         <div style="margin-top: 12px">
-          <a href="#" @click="grantPermission()" class="sidebar-button white">Grant Permission</a>
+          <a href="#" @click="logOut()" class="sidebar-button white">Log out</a>
         </div>
       </div>
       <!-- <div class="columns-8 w-row">
@@ -75,13 +76,21 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 
 export default {
   name: "Sidebar",
-  computed: mapState(["eos", "account"]),
+  computed: {
+    ...mapState(["account", "loadingActiveAuthority"]),
+    ...mapGetters(["hasGrantedPermission"])
+  },
   methods: {
-    ...mapActions(["pairScatter", "logOut", "grantPermission"])
+    ...mapActions([
+      "pairScatter",
+      "logOut",
+      "grantPermission",
+      "removePermission"
+    ])
   }
 };
 </script>
