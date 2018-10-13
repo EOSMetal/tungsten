@@ -5171,7 +5171,7 @@
    (i32.const 384)
   )
   (set_local $3
-   (i64.const 5462355)
+   (i64.const 5459781)
   )
   (set_local $4
    (i32.const 0)
@@ -5444,7 +5444,7 @@
      (get_local $12)
      (i32.const 72)
     )
-    (i64.const 1398362884)
+    (i64.const 1397703940)
    )
    (i64.store offset=48
     (get_local $12)
@@ -6729,7 +6729,7 @@
    (i32.const 384)
   )
   (set_local $11
-   (i64.const 5462355)
+   (i64.const 5459781)
   )
   (block $label$0
    (block $label$1
@@ -6838,7 +6838,7 @@
    (i32.const 384)
   )
   (set_local $11
-   (i64.const 5462355)
+   (i64.const 5459781)
   )
   (set_local $9
    (i32.const 0)
@@ -6930,8 +6930,8 @@
   )
   (call $eosio_assert
    (i64.eq
-    (i64.const 1398362884)
-    (i64.const 1398362884)
+    (i64.const 1397703940)
+    (i64.const 1397703940)
    )
    (i32.const 1088)
   )
@@ -7554,7 +7554,7 @@
        (get_local $16)
        (i32.const 64)
       )
-      (i64.const 1398362884)
+      (i64.const 1397703940)
      )
      (i32.store
       (i32.add
@@ -7790,7 +7790,7 @@
                  (i64.load
                   (get_local $15)
                  )
-                 (i64.const 1398362884)
+                 (i64.const 1397703940)
                 )
                 (i32.const 1296)
                )
@@ -8292,7 +8292,7 @@
                (i64.load
                 (get_local $9)
                )
-               (i64.const 1398362884)
+               (i64.const 1397703940)
               )
               (i32.const 1296)
              )
@@ -8927,7 +8927,7 @@
            (get_local $16)
            (i32.const 64)
           )
-          (i64.const 1398362884)
+          (i64.const 1397703940)
          )
          (i32.store
           (i32.add
@@ -9233,7 +9233,7 @@
         (get_local $16)
         (i32.const 64)
        )
-       (i64.const 1398362884)
+       (i64.const 1397703940)
       )
       (i32.store
        (i32.add
@@ -10495,7 +10495,7 @@
    (i32.const 384)
   )
   (set_local $7
-   (i64.const 5462355)
+   (i64.const 5459781)
   )
   (set_local $5
    (i32.const 0)
@@ -10768,7 +10768,7 @@
      (get_local $12)
      (i32.const 64)
     )
-    (i64.const 1398362884)
+    (i64.const 1397703940)
    )
    (i32.store
     (i32.add
@@ -17719,7 +17719,7 @@
    (i32.const 384)
   )
   (set_local $5
-   (i64.const 5462355)
+   (i64.const 5459781)
   )
   (set_local $4
    (i32.const 0)
@@ -17814,7 +17814,7 @@
     (get_local $1)
     (i32.const 24)
    )
-   (i64.const 1398362884)
+   (i64.const 1397703940)
   )
   (i64.store offset=16
    (get_local $1)

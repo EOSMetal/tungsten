@@ -94,7 +94,7 @@ void tungsten::createclaim(account_name claimer, account_name bond_name,
 
     action(permission_level{claimer, N(active)},
            N(eosio.token), N(transfer),
-           std::make_tuple(claimer, _self, asset(deposit),
+           std::make_tuple(claimer, _self, asset(deposit, S(4, EOS)),
                            string("Security deposit for claim ") + name{claim_name}.to_string()))
         .send();
 }
@@ -125,8 +125,8 @@ void tungsten::ruleclaim(account_name claim_name, bool authorize, string details
     eosio_assert(claim.expiration > now(), "Claim has already expired");
     eosio_assert(bond.deposit.amount > 0, "Cannot rule a claim on a bond with a depleted deposit");
 
-    asset balance = asset(claim.amount.amount * this->claim_security_deposit);
-    asset arbitrator_fee = asset(balance.amount * this->arbitrator_fee);
+    asset balance = asset(claim.amount.amount * this->claim_security_deposit, S(4, EOS));
+    asset arbitrator_fee = asset(balance.amount * this->arbitrator_fee, S(4, EOS));
     balance -= arbitrator_fee;
 
     action(permission_level{_self, N(active)},
@@ -144,7 +144,7 @@ void tungsten::ruleclaim(account_name claim_name, bool authorize, string details
         } else {
             balance += bond.deposit;
             bonds.modify(bond, 0, [&](bond_type &bond) {
-                bond.deposit = asset(0);
+                bond.deposit = asset(0, S(4, EOS));
             });
         }
         action(permission_level{_self, N(active)},
@@ -179,7 +179,8 @@ void tungsten::closeclaim(account_name claim_name) {
 
     action(permission_level{_self, N(active)},
            N(eosio.token), N(transfer),
-           std::make_tuple(_self, claim.claimer, asset(claim.amount.amount * this->claim_security_deposit),
+           std::make_tuple(_self, claim.claimer,
+                           asset(claim.amount.amount * this->claim_security_deposit, S(4, EOS)),
                            string("Closed claim ") + name{claim_name}.to_string()))
         .send();
 
