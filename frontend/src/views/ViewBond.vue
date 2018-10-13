@@ -60,15 +60,10 @@
           </div>
           <div class="w-col w-col-4">
             <h1 class="brand-text claim-name">Active Claims:</h1>
-            <div class="active-claims-block">
-              <h2 class="active-bond"><strong>fakeclaimer</strong></h2>
-              <h2 class="active-bond-claim-name"><strong class="bold-text">fakeclaim</strong></h2>
-              <h2 class="active-bond-price">90 EOS</h2>
-            </div>
-            <div class="active-claims-block">
-              <h2 class="active-bond"><strong>claimer</strong></h2>
-              <h2 class="active-bond-claim-name"><strong class="bold-text">claimname</strong></h2>
-              <h2 class="active-bond-price">200 SYS</h2>
+            <div v-for="claim in claims" :key="claim.name" class="active-claims-block">
+              <h2 class="active-bond"><strong>{{claim.claimer}}</strong></h2>
+              <h2 class="active-bond-claim-name"><strong class="bold-text">{{claim.name}}</strong></h2>
+              <h2 class="active-bond-price" style="font-size: 160%">{{claim.amount}}</h2>
             </div>
           </div>
         </div>
@@ -82,14 +77,28 @@ import { mapState } from "vuex";
 import moment from "moment";
 
 export default {
+  data() {
+    return {
+      claims: []
+    };
+  },
   computed: {
-    ...mapState(["bond", "loadingBond"])
+    ...mapState(["bond", "loadingBond", "config"])
   },
   filters: {
     date: ts => moment(parseInt(ts)).fromNow()
   },
   async mounted() {
-    await this.$store.dispatch("loadBond", this.$route.params.name);
+    const [, { rows }] = await Promise.all([
+      this.$store.dispatch("loadBond", this.$route.params.name),
+      this.$eos.getTableRows({
+        json: true,
+        code: this.config.contractAccount,
+        scope: this.config.contractAccount,
+        table: "claims"
+      })
+    ]);
+    this.claims = rows;
   }
 };
 </script>
