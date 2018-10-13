@@ -196,13 +196,21 @@ export default new Vuex.Store({
         ];
       }
 
-      await eos.scatter.updateauth(
-        state.account.name,
-        "active",
-        "owner",
-        authority
-      );
-      await dispatch("loadActiveAuthority");
+      try {
+        await eos.scatter.updateauth(
+          state.account.name,
+          "active",
+          "owner",
+          authority
+        );
+        await dispatch("loadActiveAuthority");
+      } catch (error) {
+        Vue.notify({
+          type: "error",
+          title: "Error",
+          text: eos.extractErrorMessage(error)
+        });
+      }
     },
     async removePermission({ state, dispatch, getters }) {
       const authority = {
@@ -212,13 +220,21 @@ export default new Vuex.Store({
         )
       };
 
-      await eos.scatter.updateauth(
-        state.account.name,
-        "active",
-        "owner",
-        authority
-      );
-      await dispatch("loadActiveAuthority");
+      try {
+        await eos.scatter.updateauth(
+          state.account.name,
+          "active",
+          "owner",
+          authority
+        );
+        await dispatch("loadActiveAuthority");
+      } catch (error) {
+        Vue.notify({
+          type: "error",
+          title: "Error",
+          text: eos.extractErrorMessage(error)
+        });
+      }
     }
   }
 });
