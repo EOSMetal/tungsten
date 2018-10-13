@@ -23,7 +23,7 @@
                 </div>
               </div>
               <div class="w-form">
-                <form id="email-form" class="form w-clearfix">
+                <form @submit.prevent="submit()" id="email-form" class="form w-clearfix">
                   <label for="bondName" class="bond-label-form">Bond Name</label>
                   <input v-model="claim.bondName" disabled type="text" class="text-field w-input"
                     maxlength="12" id="bondName" required/>
@@ -76,24 +76,21 @@ export default {
     };
   },
   computed: {
-    ...mapState(["scatterEos", "account", "bond", "loadingBond", "config"])
+    ...mapState(["bond", "loadingBond", "account", "config"])
   },
   async mounted() {
-    await this.$store.dispatch("loadBond", this.$route.params.name);
+    await this.$store.dispatch("loadBond", this.$route.params.bondName);
   },
   methods: {
     async submit() {
-      await this.scatterEos.transaction(this.config.contractAccount, tr => {
-        tr.createbond(
+      await this.$eos.scatter.transaction(this.config.contractAccount, tr => {
+        tr.createclaim(
           this.account.name,
           this.claim.bondName,
           this.claim.name,
           this.claim.amount,
           this.claim.details,
-          this.claim.language,
-          {
-            authorization: [`${this.account.name}@${this.account.authority}`]
-          }
+          this.claim.language
         );
       });
       this.$router.push({
