@@ -16,6 +16,7 @@
     "moment": "^2.22.2",
     "scatter-js": "^2.5.2",
     "vue": "^2.5.17",
+    "vue-burger-menu": "^1.0.8",
     "vue-datetime": "^1.0.0-beta.6",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
