@@ -1,10 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
-
 import ScatterJS from "scatter-js/dist/scatter.cjs";
 import eosjs from "eosjs";
-
-Vue.use(Vuex);
 
 const network = {
   local: {
@@ -21,25 +18,31 @@ const network = {
   }
 }[process.env.VUE_APP_EOSIO_NETWORK || "local"];
 
+const eos = eosjs({
+  chainId: network.chainId,
+  httpEndpoint: `${network.protocol}://${network.host}:${network.port}`
+});
+eos.scatter = null;
+
+Vue.mixin({
+  beforeCreate() {
+    this.$eos = eos;
+  }
+});
+
+Vue.use(Vuex);
+
 export default new Vuex.Store({
   state: {
     config: {
       network,
       contractAccount: process.env.VUE_APP_CONTRACT_ACCOUNT || "tungstenbond"
     },
-    eos: eosjs({
-      chainId: network.chainId,
-      httpEndpoint: `${network.protocol}://${network.host}:${network.port}`
-    }),
-    scatterEos: null,
     account: null,
     bond: null,
     loadingBond: true
   },
   mutations: {
-    setScatterEos(state, eos) {
-      state.scatterEos = eos;
-    },
     setAccount(state, account) {
       state.account = account;
     },
@@ -67,17 +70,19 @@ export default new Vuex.Store({
       );
       commit("setAccount", account);
 
-      const eos = scatter.eos(network, eosjs, { expireInSeconds: 60 });
-      commit("setScatterEos", eos);
+      eos.scatter = scatter.eos(network, eosjs, {
+        authorization: `${account.name}@${account.authority}`,
+        expireInSeconds: 60
+      });
     },
     logOut({ commit }) {
-      commit("setScatterEos", null);
+      eos.scatter = null;
       commit("setAccount", null);
     },
     async loadBond({ state, commit }, bondName) {
       commit("startLoadingBond");
       commit("setBond", null);
-      const bond = (await state.eos.getTableRows({
+      const bond = (await eos.getTableRows({
         json: true,
         code: state.config.contractAccount,
         scope: state.config.contractAccount,
@@ -91,7 +96,7 @@ export default new Vuex.Store({
       commit("finishLoadingBond");
     },
     async grantPermission({ state }) {
-      const accountInfo = await state.eos.getAccount({
+      const accountInfo = await eos.getAccount({
         account_name: state.account.name
       });
       const authority = accountInfo.permissions.find(
@@ -104,7 +109,7 @@ export default new Vuex.Store({
         },
         weight: authority.threshold
       });
-      await state.scatterEos.updateauth(
+      await eos.scatter.updateauth(
         state.account.name,
         "active",
         "owner",

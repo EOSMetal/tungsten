@@ -44,13 +44,13 @@ export default {
     };
   },
   computed: {
-    ...mapState(["eos", "config"])
+    ...mapState(["config"])
   },
   filters: {
     date: ts => moment(parseInt(ts)).fromNow()
   },
   async mounted() {
-    this.bonds = (await this.eos.getTableRows({
+    this.bonds = (await this.$eos.getTableRows({
       json: true,
       code: this.config.contractAccount,
       scope: this.config.contractAccount,
