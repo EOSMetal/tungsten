@@ -1,5 +1,5 @@
 <template>
-  <div data-collapse="medium" data-animation="default" data-duration="400" data-no-scroll="1" class="left-navigation w-nav">
+  <div data-collapse="medium" data-animation="default" data-duration="400" data-no-scroll="1" class="left-navigation w-nav" style="z-index: auto">
     <router-link :to="{name: 'home'}" class="logo-link w-nav-brand">
       <h1 class="brand-text logo">Tungsten</h1>
       <div class="credits">

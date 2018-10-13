@@ -12,6 +12,9 @@ Vue.use(Datetime);
 import Notifications from "vue-notification";
 Vue.use(Notifications);
 
+import Modal from "vue-js-modal";
+Vue.use(Modal, { dynamic: true, injectModalsContainer: true });
+
 Vue.config.productionTip = false;
 
 new Vue({
