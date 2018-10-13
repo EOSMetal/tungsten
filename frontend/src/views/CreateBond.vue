@@ -34,7 +34,7 @@
                   <label for="arbitrator" class="bond-label-form">Arbitrator Account</label>
                   <input v-model="bond.arbitrator" type="text" class="text-field w-input" maxlength="12" id="arbitrator"/>
                   <label for="expiration" class="bond-label-form">Expiration Date</label>
-                  <input v-model="bond.expiration" type="text" class="text-field spacer w-input" id="expiration" required>
+                  <datetime type="datetime" v-model="bond.expiration" input-class="text-field spacer w-input" input-id="expiration" required></datetime>
                   <label for="ricardian" class="bond-label-form">Ricardian Contract</label>
                   <textarea v-model="bond.ricardian" id="ricardian" maxlength="5000" class="textarea w-input"></textarea>
                   <input type="submit" value="Submit Bond" class="navy-button submit-light w-button"/>
@@ -81,7 +81,7 @@ export default {
           this.bond.name,
           this.bond.deposit,
           this.bond.ricardian,
-          this.bond.expiration,
+          new Date(this.bond.expiration).getTime(),
           this.bond.arbitrator
         );
       });
