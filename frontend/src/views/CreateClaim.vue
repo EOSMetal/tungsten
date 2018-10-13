@@ -86,20 +86,28 @@ export default {
   },
   methods: {
     async submit() {
-      await this.$eos.scatter.transaction(this.config.contractAccount, tr => {
-        tr.createclaim(
-          this.account.name,
-          this.claim.bondName,
-          this.claim.name,
-          this.claim.amount,
-          this.claim.details,
-          this.claim.language
-        );
-      });
-      this.$router.push({
-        name: "viewClaim",
-        params: { name: this.claim.name }
-      });
+      try {
+        await this.$eos.scatter.transaction(this.config.contractAccount, tr => {
+          tr.createclaim(
+            this.account.name,
+            this.claim.bondName,
+            this.claim.name,
+            this.claim.amount,
+            this.claim.details,
+            this.claim.language
+          );
+        });
+        this.$router.push({
+          name: "viewClaim",
+          params: { name: this.claim.name }
+        });
+      } catch (error) {
+        this.$notify({
+          type: "error",
+          title: "Error",
+          text: this.$eos.extractErrorMessage(error)
+        });
+      }
     }
   }
 };

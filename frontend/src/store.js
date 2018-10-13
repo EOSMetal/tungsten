@@ -23,6 +23,20 @@ const eos = eosjs({
   httpEndpoint: `${network.protocol}://${network.host}:${network.port}`
 });
 eos.scatter = null;
+eos.extractErrorMessage = error => {
+  let message;
+  if (typeof error === "string") {
+    const parsedError = JSON.parse(error);
+    if (parsedError.error) {
+      message = parsedError.error.details[0].message;
+    } else {
+      message = parsedError.message;
+    }
+  } else {
+    message = error.message;
+  }
+  return message.charAt(0).toUpperCase() + message.slice(1);
+};
 
 Vue.mixin({
   beforeCreate() {

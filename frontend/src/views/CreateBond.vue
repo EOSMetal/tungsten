@@ -75,17 +75,28 @@ export default {
   },
   methods: {
     async submit() {
-      await this.$eos.scatter.transaction(this.config.contractAccount, tr => {
-        tr.createbond(
-          this.account.name,
-          this.bond.name,
-          this.bond.deposit,
-          this.bond.ricardian,
-          new Date(this.bond.expiration).getTime(),
-          this.bond.arbitrator
-        );
-      });
-      this.$router.push({ name: "viewBond", params: { name: this.bond.name } });
+      try {
+        await this.$eos.scatter.transaction(this.config.contractAccount, tr => {
+          tr.createbond(
+            this.account.name,
+            this.bond.name,
+            this.bond.deposit,
+            this.bond.ricardian,
+            Math.floor(new Date(this.bond.expiration).getTime() / 1000),
+            this.bond.arbitrator
+          );
+        });
+        this.$router.push({
+          name: "viewBond",
+          params: { name: this.bond.name }
+        });
+      } catch (error) {
+        this.$notify({
+          type: "error",
+          title: "Error",
+          text: this.$eos.extractErrorMessage(error)
+        });
+      }
     }
   }
 };
