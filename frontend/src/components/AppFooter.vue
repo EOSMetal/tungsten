@@ -4,8 +4,10 @@
       <div class="w-row">
         <div class="w-col w-col-6">
           <div class="footer-text">
-            <img src="@/assets/images/fulltime-logo-32.jpg" class="fulltime-logo"/>
-            Designed by FULLTIME.<span class="digital">digital</span>
+            <a class="fulltime-link" href="http://www.fulltime.digital/">
+              <img src="@/assets/images/fulltime-logo-32.jpg" class="fulltime-logo"/>
+              Designed by FULLTIME.<span class="digital">digital</span>
+            </a>
           </div>
         </div>
         <div class="column-16 w-clearfix w-col w-col-6">
@@ -25,6 +27,10 @@ export default {
 </script>
 
 <style scoped>
+.fulltime-link {
+  color: #0f2e4d;
+  text-decoration: none;
+}
 .fulltime-logo {
   margin-top: -3px;
 }
