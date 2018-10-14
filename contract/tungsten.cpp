@@ -71,7 +71,8 @@ void tungsten::createclaim(account_name claimer, account_name bond_name,
     eosio_assert(details.length() > 0, "Must provide details of the claim");
     eosio_assert(language.length() > 0, "Must provide language of the details of the claim");
 
-    eosio_assert(amount.symbol == S(4, EOS), "Deposit must be in the system token and with the same precision");
+    eosio_assert(amount.symbol == S(4, EOS),
+                 "Claimed amount must be in the system token and with the same precision");
     eosio_assert(amount.amount > 0, "Claim amount must be positive");
     int64_t deposit = amount.amount * this->claim_security_deposit;
     int64_t fee = deposit * this->arbitrator_fee;
