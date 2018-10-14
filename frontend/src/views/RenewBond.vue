@@ -2,7 +2,7 @@
   <form @submit.prevent="renewBond()">
     <label for="expiration" class="bond-label-form">New Expiration Date</label>
     <datetime type="datetime" v-model="date" input-class="text-field spacer w-input" input-id="expiration" required></datetime>
-    <input type="submit" value="Extend"/>
+    <input type="submit" value="Extend" class="navy-button submit-light w-button"/>
   </form>
 </template>
 
