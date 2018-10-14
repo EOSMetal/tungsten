@@ -210,6 +210,7 @@ export default new Vuex.Store({
           title: "Error",
           text: eos.extractErrorMessage(error)
         });
+        throw error;
       }
     },
     async removePermission({ state, dispatch, getters }) {
@@ -234,6 +235,7 @@ export default new Vuex.Store({
           title: "Error",
           text: eos.extractErrorMessage(error)
         });
+        throw error;
       }
     },
     async renewBond({ state, commit }, { bond, expiration }) {
@@ -248,6 +250,7 @@ export default new Vuex.Store({
           title: "Error",
           text: eos.extractErrorMessage(error)
         });
+        throw error;
       }
     },
     async closeBond({ state, commit }, bond) {
@@ -262,6 +265,22 @@ export default new Vuex.Store({
           title: "Error",
           text: eos.extractErrorMessage(error)
         });
+        throw error;
+      }
+    },
+    async closeClaim({ state, commit }, claim) {
+      try {
+        await eos.scatter.transaction(state.config.contractAccount, tr => {
+          tr.closeclaim(claim.name);
+        });
+        commit("setClaim", null);
+      } catch (error) {
+        Vue.notify({
+          type: "error",
+          title: "Error",
+          text: eos.extractErrorMessage(error)
+        });
+        throw error;
       }
     }
   }

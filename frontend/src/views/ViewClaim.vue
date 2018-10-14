@@ -55,8 +55,14 @@
           <div class="w-col w-col-4">
             <h1 class="brand-text claim-name">Actions</h1>
             <div class="active-claims-block">
-              <h2 class="active-bond"><strong>Close Claim</strong></h2>
-              <h2 class="active-bond"><strong>Rule Claim</strong></h2>
+              <h2 class="active-bond">
+                <a v-if="shouldShowCloseClaimButton" @click="closeClaim()" href="#" class="action-link">
+                  Close Claim
+                </a>
+              </h2>
+              <h2 class="active-bond">
+                Rule Claim
+              </h2>
             </div>
           </div>
         </div>
@@ -70,13 +76,40 @@ import { mapState } from "vuex";
 
 export default {
   computed: {
-    ...mapState(["bond", "loadingBond", "claim", "loadingClaim"])
+    ...mapState(["bond", "loadingBond", "claim", "loadingClaim", "account"]),
+    shouldShowCloseClaimButton() {
+      return (
+        this.account &&
+        this.account.name === this.claim.claimer &&
+        (Date.now() >
+          this.claim.expiration * 1000 - 7 * 24 * 60 * 60 * 1000 + 10000 ||
+          (this.bond && this.bond.deposit === "0.0000 EOS"))
+      );
+    }
   },
   async mounted() {
     await this.$store.dispatch("loadClaim", this.$route.params.name);
     if (this.claim) {
       await this.$store.dispatch("loadBond", this.claim.bond_name);
     }
+  },
+  methods: {
+    async closeClaim() {
+      await this.$store.dispatch("closeClaim", this.claim);
+      this.$router.push({ name: "viewBond", params: { name: this.bond.name } });
+      this.$notify({
+        type: "success",
+        title: "Success",
+        text: "Claim successfully closed"
+      });
+    }
   }
 };
 </script>
+
+<style scoped>
+.action-link {
+  color: white;
+  text-decoration: none;
+}
+</style>
