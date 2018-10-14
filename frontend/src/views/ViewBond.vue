@@ -7,7 +7,7 @@
             <h1 class="brand-text page-title">Examine Bond</h1>
             <h2 class="page-subtitle">Review the bond details below</h2>
           </div>
-          <div v-if="!loadingBond && bond" class="align-right w-col w-col-4">
+          <div v-if="!loadingBond && bond && Date.now() < bond.expiration * 1000" class="align-right w-col w-col-4">
             <router-link :to="{name: 'createClaim', params: {bondName: bond.name}}" class="navy-button white">
               File New Claim
             </router-link>
@@ -64,17 +64,28 @@
             </div>
           </div>
           <div class="w-col w-col-4">
-            <h1 class="brand-text claim-name">Active Claims:</h1>
-            <div v-for="claim in claims" :key="claim.name" class="active-claims-block">
-              <h2 class="active-bond"><strong>{{claim.claimer}}</strong></h2>
-              <h2 class="active-bond-claim-name">
-                <router-link :to="{name: 'viewClaim', params: {name: claim.name}}" class="view-claim">
-                  <strong class="bold-text">
-                    {{claim.name}}
-                  </strong>
-                </router-link>
-              </h2>
-              <h2 class="active-bond-price" style="font-size: 160%">{{claim.amount}}</h2>
+            <div v-if="Date.now() > bond.expiration * 1000 && claims.length === 0">
+              <h1 class="brand-text claim-name">Bond Expired</h1>
+              <p>This bond has expired and it has no active claims.</p>
+              <button v-if="account && account.name === bond.creator"
+                      @click="closeBond()"
+                      class="navy-button submit-light w-button">
+                Close Bond
+              </button>
+            </div>
+            <div v-else>
+              <h1 class="brand-text claim-name">Active Claims:</h1>
+              <div v-for="claim in claims" :key="claim.name" class="active-claims-block">
+                <h2 class="active-bond"><strong>{{claim.claimer}}</strong></h2>
+                <h2 class="active-bond-claim-name">
+                  <router-link :to="{name: 'viewClaim', params: {name: claim.name}}" class="view-claim">
+                    <strong class="bold-text">
+                      {{claim.name}}
+                    </strong>
+                  </router-link>
+                </h2>
+                <h2 class="active-bond-price" style="font-size: 160%">{{claim.amount}}</h2>
+              </div>
             </div>
           </div>
         </div>
@@ -111,6 +122,15 @@ export default {
   methods: {
     showExtendModal() {
       this.$modal.show(RenewBond, { bond: this.bond });
+    },
+    async closeBond() {
+      await this.$store.dispatch("closeBond", this.bond);
+      this.$router.push({ name: "bonds" });
+      this.$notify({
+        type: "success",
+        title: "Success",
+        text: "Bond successfully closed"
+      });
     }
   }
 };

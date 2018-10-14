@@ -249,6 +249,20 @@ export default new Vuex.Store({
           text: eos.extractErrorMessage(error)
         });
       }
+    },
+    async closeBond({ state, commit }, bond) {
+      try {
+        await eos.scatter.transaction(state.config.contractAccount, tr => {
+          tr.closebond(bond.name);
+        });
+        commit("setBond", null);
+      } catch (error) {
+        Vue.notify({
+          type: "error",
+          title: "Error",
+          text: eos.extractErrorMessage(error)
+        });
+      }
     }
   }
 });
