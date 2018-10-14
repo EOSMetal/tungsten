@@ -52,7 +52,7 @@
           <div class="w-col w-col-4">
             <h1 class="brand-text claim-name form-left">Helpful Links</h1>
             <div class="active-claims-block">
-              <router-link :to="{name: 'about'}">
+              <router-link :to="{name: 'about'}" style="text-decoration: none">
                 <h2 class="active-bond"><strong>About Bonds and Claims</strong></h2>
               </router-link>
             </div>
