@@ -18364,38 +18364,29 @@
    )
    (i32.const 496)
   )
+  (i64.store offset=64
+   (get_local $1)
+   (i64.add
+    (i64.load offset=64
+     (get_local $1)
+    )
+    (i64.load
+     (i32.add
+      (i32.load
+       (get_local $2)
+      )
+      (i32.const 16)
+     )
+    )
+   )
+  )
   (set_local $3
    (i64.load
     (get_local $1)
    )
   )
-  (set_local $2
-   (i32.load
-    (get_local $2)
-   )
-  )
-  (i64.store offset=64
-   (get_local $1)
-   (i64.add
-    (i64.and
-     (i64.div_u
-      (call $current_time)
-      (i64.const 1000000)
-     )
-     (i64.const 4294967295)
-    )
-    (i64.load offset=16
-     (get_local $2)
-    )
-   )
-  )
   (call $eosio_assert
-   (i64.eq
-    (get_local $3)
-    (i64.load
-     (get_local $1)
-    )
-   )
+   (i32.const 1)
    (i32.const 560)
   )
   (i32.store offset=24

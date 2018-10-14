@@ -111,7 +111,7 @@ void tungsten::delayclaim(account_name claim_name) {
     eosio_assert(claim.expiration > now(), "This claim has already expired");
 
     claims.modify(claim, 0, [this](claim_type &claim) {
-        claim.expiration = now() + this->claim_expiration_extension;
+        claim.expiration += this->claim_expiration_extension;
     });
 }
 
