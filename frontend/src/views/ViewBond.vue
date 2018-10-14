@@ -121,7 +121,7 @@ export default {
   },
   methods: {
     showExtendModal() {
-      this.$modal.show(RenewBond, { bond: this.bond });
+      this.$modal.show(RenewBond, { bond: this.bond }, { height: "auto" });
     },
     async closeBond() {
       await this.$store.dispatch("closeBond", this.bond);
