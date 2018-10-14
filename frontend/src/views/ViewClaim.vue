@@ -63,19 +63,26 @@
           <div class="w-col w-col-4">
             <h1 class="brand-text claim-name">Actions</h1>
             <div class="active-claims-block">
-              <h2 class="active-bond">
-                <a v-if="shouldShowCloseClaimButton" @click="closeClaim()" href="#" class="action-link">
-                  Close Claim
-                </a>
+              <h2 v-if="!account" class="active-bond">
+                Please pair your Scatter to see available actions
               </h2>
-              <h2 class="active-bond">
-                <a v-if="shouldShowDelayClaimButton" @click="delayClaim()" href="#" class="action-link">
-                  Delay Claim Expiration
-                </a>
-              </h2>
-              <h2 class="active-bond">
-                Rule Claim
-              </h2>
+              <div v-else>
+                <h2 v-if="shouldShowCloseClaimButton" class="active-bond">
+                  <a @click="closeClaim()" href="#" class="action-link">
+                    Close Claim
+                  </a>
+                </h2>
+                <h2 v-if="shouldShowArbitrationButtons" class="active-bond">
+                  <a @click="delayClaim()" href="#" class="action-link">
+                    Delay Claim Expiration
+                  </a>
+                </h2>
+                <h2 v-if="shouldShowArbitrationButtons" class="active-bond">
+                  <a @click="showRuleClaimModal()" href="#" class="action-link">
+                    Rule Claim
+                  </a>
+                </h2>
+              </div>
             </div>
           </div>
         </div>
@@ -86,6 +93,7 @@
 
 <script>
 import { mapState } from "vuex";
+import RuleClaim from "./RuleClaim";
 
 export default {
   computed: {
@@ -94,12 +102,11 @@ export default {
       return (
         this.account &&
         this.account.name === this.claim.claimer &&
-        (Date.now() >
-          this.claim.expiration * 1000 - 7 * 24 * 60 * 60 * 1000 + 10000 ||
+        (Date.now() > this.claim.expiration * 1000 ||
           (this.bond && this.bond.deposit === "0.0000 EOS"))
       );
     },
-    shouldShowDelayClaimButton() {
+    shouldShowArbitrationButtons() {
       if (this.account && this.bond && this.claim) {
         return (
           this.account.name === this.bond.arbitrator &&
@@ -133,6 +140,13 @@ export default {
         title: "Success",
         text: "Claim's expiration successfully delayed"
       });
+    },
+    async showRuleClaimModal() {
+      this.$modal.show(
+        RuleClaim,
+        { claim: this.claim, bond: this.bond },
+        { height: "auto" }
+      );
     }
   }
 };

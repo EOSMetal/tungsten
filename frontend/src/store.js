@@ -297,6 +297,21 @@ export default new Vuex.Store({
         });
         throw error;
       }
+    },
+    async ruleClaim({ state, commit }, { claim, authorize, details }) {
+      try {
+        await eos.scatter.transaction(state.config.contractAccount, tr => {
+          tr.ruleclaim(claim.name, authorize ? 1 : 0, details);
+        });
+        commit("setClaim", null);
+      } catch (error) {
+        Vue.notify({
+          type: "error",
+          title: "Error",
+          text: eos.extractErrorMessage(error)
+        });
+        throw error;
+      }
     }
   }
 });
