@@ -282,6 +282,21 @@ export default new Vuex.Store({
         });
         throw error;
       }
+    },
+    async delayClaim({ state, dispatch }, claim) {
+      try {
+        await eos.scatter.transaction(state.config.contractAccount, tr => {
+          tr.delayclaim(claim.name);
+        });
+        dispatch("loadClaim", claim.name);
+      } catch (error) {
+        Vue.notify({
+          type: "error",
+          title: "Error",
+          text: eos.extractErrorMessage(error)
+        });
+        throw error;
+      }
     }
   }
 });

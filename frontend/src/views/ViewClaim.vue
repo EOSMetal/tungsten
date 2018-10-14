@@ -39,6 +39,14 @@
                   <h2 class="bond-answer"><strong>{{claim.claimer}}</strong></h2>
                 </div>
               </div>
+              <div class="bond-breakdown w-row">
+                <div class="column-15 w-col w-col-3 w-col-tiny-6 w-col-small-3">
+                  <h2 class="bond-info">Expiry Date</h2>
+                </div>
+                <div class="column-14 w-col w-col-9 w-col-tiny-6 w-col-small-9">
+                  <h2 class="bond-answer"><strong>{{claim.expiration | dateFromNow}}</strong></h2>
+                </div>
+              </div>
               <h2 class="bond-remaining">Claimed Amount</h2>
               <h2 class="bond-price">{{claim.amount}}</h2>
               <div class="bond-breakdown w-row">
@@ -58,6 +66,11 @@
               <h2 class="active-bond">
                 <a v-if="shouldShowCloseClaimButton" @click="closeClaim()" href="#" class="action-link">
                   Close Claim
+                </a>
+              </h2>
+              <h2 class="active-bond">
+                <a v-if="shouldShowDelayClaimButton" @click="delayClaim()" href="#" class="action-link">
+                  Delay Claim Expiration
                 </a>
               </h2>
               <h2 class="active-bond">
@@ -85,6 +98,16 @@ export default {
           this.claim.expiration * 1000 - 7 * 24 * 60 * 60 * 1000 + 10000 ||
           (this.bond && this.bond.deposit === "0.0000 EOS"))
       );
+    },
+    shouldShowDelayClaimButton() {
+      if (this.account && this.bond && this.claim) {
+        return (
+          this.account.name === this.bond.arbitrator &&
+          Date.now() < this.claim.expiration * 1000
+        );
+      } else {
+        return false;
+      }
     }
   },
   async mounted() {
@@ -101,6 +124,14 @@ export default {
         type: "success",
         title: "Success",
         text: "Claim successfully closed"
+      });
+    },
+    async delayClaim() {
+      await this.$store.dispatch("delayClaim", this.claim);
+      this.$notify({
+        type: "success",
+        title: "Success",
+        text: "Claim's expiration successfully delayed"
       });
     }
   }
