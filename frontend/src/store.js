@@ -14,6 +14,7 @@ export default new Vuex.Store({
       contractAccount: process.env.VUE_APP_CONTRACT_ACCOUNT || "tungstenbond"
     },
     account: null,
+    balance: null,
     activeAuthority: null,
     loadingActiveAuthority: true,
     bond: null,
@@ -24,6 +25,9 @@ export default new Vuex.Store({
   mutations: {
     setAccount(state, account) {
       state.account = account;
+    },
+    setBalance(state, balance) {
+      state.balance = balance;
     },
     setActiveAuthority(state, authority) {
       state.activeAuthority = authority;
@@ -80,7 +84,28 @@ export default new Vuex.Store({
         expireInSeconds: 60
       });
 
-      await dispatch("loadActiveAuthority");
+      await Promise.all([
+        dispatch("loadActiveAuthority"),
+        dispatch("loadBalance")
+      ]);
+    },
+    async loadBalance({ state, commit }) {
+      try {
+        commit(
+          "setBalance",
+          (await eos.getCurrencyBalance(
+            "eosio.token",
+            state.account.name,
+            "EOS"
+          ))[0] || "0.0000 EOS"
+        );
+      } catch (error) {
+        Vue.notify({
+          type: "error",
+          title: "Error",
+          text: "Unable to load account balance"
+        });
+      }
     },
     async loadActiveAuthority({ state, commit }) {
       commit("setLoadingActiveAuthority", true);
@@ -214,12 +239,13 @@ export default new Vuex.Store({
         throw error;
       }
     },
-    async closeBond({ state, commit }, bond) {
+    async closeBond({ state, commit, dispatch }, bond) {
       try {
         await eos.scatter.transaction(state.config.contractAccount, tr => {
           tr.closebond(bond.name);
         });
         commit("setBond", null);
+        await dispatch("loadBalance");
       } catch (error) {
         Vue.notify({
           type: "error",
@@ -229,12 +255,13 @@ export default new Vuex.Store({
         throw error;
       }
     },
-    async closeClaim({ state, commit }, claim) {
+    async closeClaim({ state, commit, dispatch }, claim) {
       try {
         await eos.scatter.transaction(state.config.contractAccount, tr => {
           tr.closeclaim(claim.name);
         });
         commit("setClaim", null);
+        await dispatch("loadBalance");
       } catch (error) {
         Vue.notify({
           type: "error",
@@ -259,12 +286,16 @@ export default new Vuex.Store({
         throw error;
       }
     },
-    async ruleClaim({ state, commit }, { claim, authorize, details }) {
+    async ruleClaim(
+      { state, commit, dispatch },
+      { claim, authorize, details }
+    ) {
       try {
         await eos.scatter.transaction(state.config.contractAccount, tr => {
           tr.ruleclaim(claim.name, authorize ? 1 : 0, details);
         });
         commit("setClaim", null);
+        await dispatch("loadBalance");
       } catch (error) {
         Vue.notify({
           type: "error",

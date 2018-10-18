@@ -90,6 +90,7 @@ export default {
           name: "viewBond",
           params: { name: this.bond.name }
         });
+        await this.$store.dispatch("loadBalance");
       } catch (error) {
         this.$notify({
           type: "error",

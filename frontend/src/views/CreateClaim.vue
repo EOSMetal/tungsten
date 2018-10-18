@@ -101,6 +101,7 @@ export default {
           name: "viewClaim",
           params: { name: this.claim.name }
         });
+        await this.$store.dispatch("loadBalance");
       } catch (error) {
         this.$notify({
           type: "error",

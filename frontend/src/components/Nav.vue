@@ -42,6 +42,8 @@
             <div v-else class="account-info">
               <p>
                 Account: <strong>{{account.name}}</strong>
+                <br/>
+                Balance: <strong>{{balance}}</strong>
               </p>
               <div v-if="!loadingActiveAuthority" style="margin-top: 12px">
                 <a v-if="!hasGrantedPermission" href="#" @click="grantPermission()" class="sidebar-button white">Grant Permission</a>
@@ -74,7 +76,7 @@ import { mapActions, mapState, mapGetters } from "vuex";
 export default {
   name: "Nav",
   computed: {
-    ...mapState(["account", "loadingActiveAuthority"]),
+    ...mapState(["account", "balance", "loadingActiveAuthority"]),
     ...mapGetters(["hasGrantedPermission"])
   },
   methods: {
