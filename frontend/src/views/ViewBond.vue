@@ -108,16 +108,29 @@ export default {
     ...mapState(["bond", "loadingBond", "config", "account"])
   },
   async mounted() {
-    const [, { rows }] = await Promise.all([
-      this.$store.dispatch("loadBond", this.$route.params.name),
-      this.$eos.getTableRows({
+    const fetchClaims = async (lower_bound = 0) => {
+      const result = await this.$eos.getTableRows({
         json: true,
         code: this.config.contractAccount,
         scope: this.config.contractAccount,
-        table: "claims"
-      })
+        table: "claims",
+        lower_bound,
+        limit: 50
+      });
+      this.claims = this.claims.concat(
+        result.rows.filter(c => c.bond_name === this.$route.params.name)
+      );
+      if (result.more) {
+        await fetchClaims(
+          this.$eos.nextKey(result.rows[result.rows.length - 1].name)
+        );
+      }
+    };
+
+    await Promise.all([
+      this.$store.dispatch("loadBond", this.$route.params.name),
+      fetchClaims()
     ]);
-    this.claims = rows;
   },
   methods: {
     showExtendModal() {
