@@ -47,12 +47,23 @@ export default {
     ...mapState(["config"])
   },
   async mounted() {
-    this.bonds = (await this.$eos.getTableRows({
-      json: true,
-      code: this.config.contractAccount,
-      scope: this.config.contractAccount,
-      table: "bonds"
-    })).rows;
+    const fetchBonds = async (lower_bound = 0) => {
+      const result = await this.$eos.getTableRows({
+        json: true,
+        code: this.config.contractAccount,
+        scope: this.config.contractAccount,
+        table: "bonds",
+        lower_bound,
+        limit: 50
+      });
+      this.bonds = this.bonds.concat(result.rows);
+      if (result.more) {
+        await fetchBonds(
+          this.$eos.nextKey(result.rows[result.rows.length - 1].name)
+        );
+      }
+    };
+    await fetchBonds();
   }
 };
 </script>
