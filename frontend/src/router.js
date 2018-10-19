@@ -3,7 +3,7 @@ import Router from "vue-router";
 
 import Layout from "./views/Layout.vue";
 import NotFound from "./views/NotFound.vue";
-// import Home from "./views/Home.vue";
+import Home from "./views/Home.md";
 import About from "./views/About.md";
 import Bonds from "./views/Bonds.vue";
 import CreateBond from "./views/CreateBond.vue";
@@ -25,8 +25,8 @@ export default new Router({
         {
           path: "",
           name: "home",
-          redirect: { name: "about" }
-          // component: Home
+          // redirect: { name: "about" }
+          component: Home
         },
         {
           path: "about",
