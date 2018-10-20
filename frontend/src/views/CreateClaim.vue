@@ -32,8 +32,10 @@
                     maxlength="12" id="bondName" required/>
                   <label for="name" class="bond-label-form">Claim Name</label>
                   <input v-model="claim.name" type="text" class="text-field w-input" maxlength="12" id="name" required/>
+                  
                   <label for="amount" class="bond-label-form">Claimed Amount</label>
-                  <input v-model="claim.amount" type="text" class="text-field w-input" maxlength="256" id="amount" required/>
+                  <AssetInput v-model="claim.amount" id="amount" required/>
+                  
                   <label for="language" class="bond-label-form">Language of the Claim Details</label>
                   <input v-model="claim.language" type="text" class="text-field w-input" maxlength="64" id="language" required/>
                   <!-- <select id="language" class="text-field w-select" required>
@@ -65,8 +67,10 @@
 
 <script>
 import { mapState } from "vuex";
+import AssetInput from "../components/AssetInput";
 
 export default {
+  components: { AssetInput },
   data() {
     return {
       claim: {

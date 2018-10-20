@@ -30,7 +30,7 @@
                   <label for="name" class="bond-label-form">Name</label>
                   <input v-model="bond.name" type="text" class="text-field w-input" maxlength="12" id="name" required/>
                   <label for="deposit" class="bond-label-form">Deposit Amount</label>
-                  <input v-model="bond.deposit" type="text" class="text-field w-input" id="deposit" required/>
+                  <AssetInput v-model="bond.deposit" id="deposit" required/>
                   <label for="arbitrator" class="bond-label-form">Arbitrator Account</label>
                   <input v-model="bond.arbitrator" type="text" class="text-field w-input" maxlength="12" id="arbitrator"/>
                   <label for="expiration" class="bond-label-form">Expiration Date</label>
@@ -57,8 +57,10 @@
 
 <script>
 import { mapState } from "vuex";
+import AssetInput from "../components/AssetInput";
 
 export default {
+  components: { AssetInput },
   data() {
     return {
       bond: {
