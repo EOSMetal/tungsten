@@ -35,6 +35,12 @@
                   
                   <label for="amount" class="bond-label-form">Claimed Amount</label>
                   <AssetInput v-model="claim.amount" id="amount" required/>
+
+                  <label for="securityDeposit" class="bond-label-form">Claim Security Deposit (10%)</label>
+                  <AssetInput :value="securityDeposit" id="securityDeposit" disabled/>
+                  
+                  <label for="arbitratorFee" class="bond-label-form">Arbitration Fee (20% of deposit)</label>
+                  <AssetInput :value="arbitratorFee" id="arbitratorFee" disabled/>
                   
                   <label for="language" class="bond-label-form">Language of the Claim Details</label>
                   <input v-model="claim.language" type="text" class="text-field w-input" maxlength="64" id="language" required/>
@@ -68,6 +74,11 @@
 <script>
 import { mapState } from "vuex";
 import AssetInput from "../components/AssetInput";
+import eosjs from "eosjs";
+import Big from "big.js";
+
+const BigEos = Big();
+BigEos.RM = 0;
 
 export default {
   components: { AssetInput },
@@ -83,7 +94,28 @@ export default {
     };
   },
   computed: {
-    ...mapState(["bond", "loadingBond", "account", "config"])
+    ...mapState(["bond", "loadingBond", "account", "config"]),
+    securityDeposit() {
+      if (this.claim.amount) {
+        const { amount } = eosjs.modules.format.parseAsset(this.claim.amount);
+        return (
+          BigEos(amount)
+            .times("0.1")
+            .toFixed(4) + " EOS"
+        );
+      }
+    },
+    arbitratorFee() {
+      if (this.claim.amount) {
+        const { amount } = eosjs.modules.format.parseAsset(this.claim.amount);
+        return (
+          BigEos(amount)
+            .times("0.1")
+            .times("0.2")
+            .toFixed(4) + " EOS"
+        );
+      }
+    }
   },
   async mounted() {
     await this.$store.dispatch("loadBond", this.$route.params.bondName);
