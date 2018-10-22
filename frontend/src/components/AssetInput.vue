@@ -16,25 +16,26 @@
 import eosjs from "eosjs";
 import Big from "big.js";
 
+const BigEos = Big();
+BigEos.RM = 0;
+
 export default {
   name: "AssetInput",
   inheritAttrs: false,
   props: ["value"],
   computed: {
     numericValue() {
-      return this.value && parseFloat(this.value.split(" ")[0]);
+      return (
+        this.value &&
+        BigEos(eosjs.modules.format.parseAsset(this.value).amount).toString()
+      );
     }
   },
   methods: {
     propagateValue(event) {
       if (event.target.value) {
-        let value = new Big(event.target.value)
-          .times(10000)
-          .toString()
-          .split(".")[0];
-        value = new Big(value).div(10000);
-        event.target.value = value;
-        value = eosjs.modules.format.DecimalPad(value, 4);
+        let value = BigEos(event.target.value).toFixed(4);
+        event.target.value = BigEos(value).toString();
         this.$emit("input", value + " EOS");
       } else {
         this.$emit("input", "");
