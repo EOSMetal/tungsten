@@ -2,30 +2,30 @@
   <nav role="navigation" class="tungsten-nav-menu">
       <router-link :to="{name: 'home'}" class="tungsten-nav-link">
         <div class="w-row">
-          <div class="w-col w-col-2">
+          <div class="w-col w-col-2 w-col-small-2 w-col-tiny-2">
             <fa-icon icon="home" size="2x" class="nav-icon"/>
           </div>
-          <div class="column-nav w-col w-col-10">
+          <div class="column-nav w-col w-col-10 w-col-small-10 w-col-tiny-10">
             Home
           </div>
         </div>
       </router-link>
       <router-link :to="{name: 'bonds'}" class="tungsten-nav-link">
         <div class="w-row">
-          <div class="w-col w-col-2">
+          <div class="w-col w-col-2 w-col-small-2 w-col-tiny-2">
             <fa-icon icon="link" size="2x" class="nav-icon"/>
           </div>
-          <div class="column-nav w-col w-col-10">
+          <div class="column-nav w-col w-col-10 w-col-small-10 w-col-tiny-10">
             Bonds
           </div>
         </div>
       </router-link>
       <router-link :to="{name: 'about'}" class="tungsten-nav-link">
         <div class="w-row">
-          <div class="w-col w-col-2">
+          <div class="w-col w-col-2 w-col-small-2 w-col-tiny-2">
             <fa-icon icon="question-circle" size="2x" class="nav-icon"/>
           </div>
-          <div class="column-nav w-col w-col-10">
+          <div class="column-nav w-col w-col-10 w-col-small-10 w-col-tiny-10">
             About
           </div>
         </div>
@@ -91,15 +91,15 @@ export default {
 </script>
 
 <style>
-.bm-menu {
-  background-color: #a8b5c0;
+#sideNav.bm-menu {
+  background-color: #aecce6;
+}
+span.bm-cross {
+  background-color: #464646;
 }
 </style>
 
 <style scoped>
-.bm-menu {
-  background-color: #d8e4ed;
-}
 .tungsten-nav-menu {
   display: block;
   padding-left: 35px;
