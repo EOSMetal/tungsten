@@ -28,30 +28,69 @@
               <div class="w-form">
                 <form @submit.prevent="submit()" id="email-form" class="form w-clearfix">
                   <label for="bondName" class="bond-label-form">Bond Name</label>
+                  <div class="help-text">
+                    <p>Lorem ipsum dolor sit amet. <a v-b-toggle.info-bondName>Read more</a></p>
+                    <b-collapse id="info-bondName">
+                      <p>Amet et delectus accommodare his consul copiosae legendos at vix ad putent delectus delicata usu. Vidit dissentiet eos cu eum an brute.</p>
+                    </b-collapse>
+                  </div>
                   <input v-model="claim.bondName" disabled type="text" class="text-field w-input"
                     maxlength="12" id="bondName" required/>
+                  
                   <label for="name" class="bond-label-form">Claim Name</label>
+                  <div class="help-text">
+                    <p>Lorem ipsum dolor sit amet. <a v-b-toggle.info-name>Read more</a></p>
+                    <b-collapse id="info-name">
+                      <p>Amet et delectus accommodare his consul copiosae legendos at vix ad putent delectus delicata usu. Vidit dissentiet eos cu eum an brute.</p>
+                    </b-collapse>
+                  </div>
                   <input v-model="claim.name" type="text" class="text-field w-input" maxlength="12" id="name" required/>
                   
                   <label for="amount" class="bond-label-form">Claimed Amount</label>
+                  <div class="help-text">
+                    <p>Lorem ipsum dolor sit amet. <a v-b-toggle.info-amount>Read more</a></p>
+                    <b-collapse id="info-amount">
+                      <p>Amet et delectus accommodare his consul copiosae legendos at vix ad putent delectus delicata usu. Vidit dissentiet eos cu eum an brute.</p>
+                    </b-collapse>
+                  </div>
                   <AssetInput v-model="claim.amount" id="amount" required/>
 
                   <label for="securityDeposit" class="bond-label-form">Claim Security Deposit (10%)</label>
+                  <div class="help-text">
+                    <p>Lorem ipsum dolor sit amet. <a v-b-toggle.info-securityDeposit>Read more</a></p>
+                    <b-collapse id="info-securityDeposit">
+                      <p>Amet et delectus accommodare his consul copiosae legendos at vix ad putent delectus delicata usu. Vidit dissentiet eos cu eum an brute.</p>
+                    </b-collapse>
+                  </div>
                   <AssetInput :value="securityDeposit" id="securityDeposit" disabled/>
                   
                   <label for="arbitratorFee" class="bond-label-form">Arbitration Fee (20% of deposit)</label>
+                  <div class="help-text">
+                    <p>Lorem ipsum dolor sit amet. <a v-b-toggle.info-arbitratorFee>Read more</a></p>
+                    <b-collapse id="info-arbitratorFee">
+                      <p>Amet et delectus accommodare his consul copiosae legendos at vix ad putent delectus delicata usu. Vidit dissentiet eos cu eum an brute.</p>
+                    </b-collapse>
+                  </div>
                   <AssetInput :value="arbitratorFee" id="arbitratorFee" disabled/>
                   
                   <label for="language" class="bond-label-form">Language of the Claim Details</label>
+                  <div class="help-text">
+                    <p>Lorem ipsum dolor sit amet. <a v-b-toggle.info-language>Read more</a></p>
+                    <b-collapse id="info-language">
+                      <p>Amet et delectus accommodare his consul copiosae legendos at vix ad putent delectus delicata usu. Vidit dissentiet eos cu eum an brute.</p>
+                    </b-collapse>
+                  </div>
                   <input v-model="claim.language" type="text" class="text-field w-input" maxlength="64" id="language" required/>
-                  <!-- <select id="language" class="text-field w-select" required>
-                    <option value="">Select one...</option>
-                    <option value="First">First Choice</option>
-                    <option value="Second">Second Choice</option>
-                    <option value="Third">Third Choice</option>
-                  </select> -->
+                  
                   <label for="details" class="bond-label-form">Claim Details</label>
+                  <div class="help-text">
+                    <p>Lorem ipsum dolor sit amet. <a v-b-toggle.info-details>Read more</a></p>
+                    <b-collapse id="info-details">
+                      <p>Amet et delectus accommodare his consul copiosae legendos at vix ad putent delectus delicata usu. Vidit dissentiet eos cu eum an brute.</p>
+                    </b-collapse>
+                  </div>
                   <textarea v-model="claim.details" id="details" maxlength="5000" class="textarea w-input"></textarea>
+                  
                   <input type="submit" value="Submit Claim" class="navy-button submit-light w-button"/>
                 </form>
               </div>

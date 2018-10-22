@@ -27,4 +27,26 @@ export default {};
   background: #bd2f25;
   border-left-color: #922119;
 }
+.collapse:not(.show) {
+  display: none;
+}
+.collapsing {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  transition: height 0.35s ease;
+}
+.help-text p {
+  font-family: "Varela Round", sans-serif;
+  font-size: 80%;
+  color: rgb(168, 168, 168);
+  margin-bottom: 2px;
+}
+.help-text a {
+  color: #60a1cc;
+  cursor: pointer;
+}
+.w-input {
+  margin-bottom: 24px;
+}
 </style>

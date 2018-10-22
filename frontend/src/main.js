@@ -15,6 +15,9 @@ Vue.use(Notifications);
 import Modal from "vue-js-modal";
 Vue.use(Modal, { dynamic: true, injectModalsContainer: true });
 
+import { Collapse } from "bootstrap-vue/es/components";
+Vue.use(Collapse);
+
 Vue.config.productionTip = false;
 
 new Vue({

@@ -28,15 +28,50 @@
               <div class="w-form">
                 <form @submit.prevent="submit()" id="email-form" class="form w-clearfix">
                   <label for="name" class="bond-label-form">Name</label>
+                  <div class="help-text">
+                    <p>Lorem ipsum dolor sit amet. <a v-b-toggle.info-name>Read more</a></p>
+                    <b-collapse id="info-name">
+                      <p>Amet et delectus accommodare his consul copiosae legendos at vix ad putent delectus delicata usu. Vidit dissentiet eos cu eum an brute.</p>
+                    </b-collapse>
+                  </div>
                   <input v-model="bond.name" type="text" class="text-field w-input" maxlength="12" id="name" required/>
+                  
                   <label for="deposit" class="bond-label-form">Deposit Amount</label>
+                  <div class="help-text">
+                    <p>Lorem ipsum dolor sit amet. <a v-b-toggle.info-amount>Read more</a></p>
+                    <b-collapse id="info-amount">
+                      <p>Amet et delectus accommodare his consul copiosae legendos at vix ad putent delectus delicata usu. Vidit dissentiet eos cu eum an brute.</p>
+                    </b-collapse>
+                  </div>
                   <AssetInput v-model="bond.deposit" id="deposit" required/>
+                  
                   <label for="arbitrator" class="bond-label-form">Arbitrator Account</label>
+                  <div class="help-text">
+                    <p>Lorem ipsum dolor sit amet. <a v-b-toggle.info-arbitrator>Read more</a></p>
+                    <b-collapse id="info-arbitrator">
+                      <p>Amet et delectus accommodare his consul copiosae legendos at vix ad putent delectus delicata usu. Vidit dissentiet eos cu eum an brute.</p>
+                    </b-collapse>
+                  </div>
                   <input v-model="bond.arbitrator" type="text" class="text-field w-input" maxlength="12" id="arbitrator"/>
+                  
                   <label for="expiration" class="bond-label-form">Expiration Date</label>
+                  <div class="help-text">
+                    <p>Lorem ipsum dolor sit amet. <a v-b-toggle.info-expiration>Read more</a></p>
+                    <b-collapse id="info-expiration">
+                      <p>Amet et delectus accommodare his consul copiosae legendos at vix ad putent delectus delicata usu. Vidit dissentiet eos cu eum an brute.</p>
+                    </b-collapse>
+                  </div>
                   <datetime type="datetime" v-model="bond.expiration" input-class="text-field spacer w-input" input-id="expiration" required></datetime>
+                  
                   <label for="ricardian" class="bond-label-form">Ricardian Contract</label>
+                  <div class="help-text">
+                    <p>Lorem ipsum dolor sit amet. <a v-b-toggle.info-ricardian>Read more</a></p>
+                    <b-collapse id="info-ricardian">
+                      <p>Amet et delectus accommodare his consul copiosae legendos at vix ad putent delectus delicata usu. Vidit dissentiet eos cu eum an brute.</p>
+                    </b-collapse>
+                  </div>
                   <textarea v-model="bond.ricardian" id="ricardian" maxlength="5000" class="textarea w-input"></textarea>
+                  
                   <input type="submit" value="Submit Bond" class="navy-button submit-light w-button"/>
                 </form>
               </div>
