@@ -60,7 +60,7 @@
               <h2 class="bond-remaining">Deposit Remaining</h2>
               <h2 class="bond-price">{{bond.deposit}}</h2>
               <h2 class="ricardian-contract"><strong class="bold-text-2">Ricardian Contract</strong></h2>
-              <h2 class="contract-answer">{{bond.ricardian}}</h2>
+              <pre class="contract-answer" style="font-weight: bold">{{bond.ricardian}}</pre>
             </div>
           </div>
           <div class="w-col w-col-4">

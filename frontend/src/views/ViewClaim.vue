@@ -57,7 +57,7 @@
                   <h2 class="bond-answer"><strong>(Language: {{claim.language}})</strong></h2>
                 </div>
               </div>
-              <h2 class="contract-answer">{{claim.details}}</h2>
+              <pre class="contract-answer" style="font-weight: bold">{{claim.details}}</pre>
             </div>
           </div>
           <div class="w-col w-col-4">
