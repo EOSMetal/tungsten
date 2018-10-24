@@ -18,6 +18,7 @@ import Big from "big.js";
 
 const BigEos = Big();
 BigEos.RM = 0;
+BigEos.PE = 100;
 
 export default {
   name: "AssetInput",
@@ -34,9 +35,13 @@ export default {
   methods: {
     propagateValue(event) {
       if (event.target.value) {
-        let value = BigEos(event.target.value).toFixed(4);
-        event.target.value = BigEos(value).toString();
-        this.$emit("input", value + " EOS");
+        let [integer, decimal] = event.target.value.split(".");
+        if (decimal && decimal.length > 4) {
+          decimal = decimal.slice(0, 4);
+        }
+        const value = integer + (decimal ? `.${decimal}` : "");
+        event.target.value = value;
+        this.$emit("input", BigEos(value).toFixed(4) + " EOS");
       } else {
         this.$emit("input", "");
       }
