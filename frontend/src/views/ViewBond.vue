@@ -73,6 +73,15 @@
                 Close Bond
               </button>
             </div>
+            <div v-else-if="bond.deposit === '0.0000 EOS' && claims.length === 0">
+              <h1 class="brand-text claim-name">Bond Depleted</h1>
+              <p>This bond has no more funds to claim and no active claims.</p>
+              <button v-if="account && account.name === bond.creator"
+                      @click="closeBond()"
+                      class="navy-button submit-light w-button">
+                Close Bond
+              </button>
+            </div>
             <div v-else>
               <h1 class="brand-text claim-name">Active Claims:</h1>
               <div v-for="claim in claims" :key="claim.name" class="active-claims-block">

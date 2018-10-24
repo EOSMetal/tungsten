@@ -48,15 +48,18 @@ void tungsten::closebond(account_name bond_name) {
     require_auth(bond.creator);
 
     eosio_assert(bond.active_claims == 0, "Cannot close a bond that still has active claims");
-    eosio_assert(bond.expiration <= now(), "Bond has not expired yet");
+    eosio_assert(bond.expiration <= now() || bond.deposit.amount == 0,
+                 "Bond has not expired yet and still has funds to claim");
 
     bonds.erase(bond);
 
-    action(permission_level{_self, N(active)},
-           N(eosio.token), N(transfer),
-           std::make_tuple(_self, bond.creator, bond.deposit,
-                           string("Close bond ") + name{bond_name}.to_string()))
-        .send();
+    if (bond.deposit.amount != 0) {
+        action(permission_level{_self, N(active)},
+               N(eosio.token), N(transfer),
+               std::make_tuple(_self, bond.creator, bond.deposit,
+                               string("Close bond ") + name{bond_name}.to_string()))
+            .send();
+    }
 }
 
 void tungsten::createclaim(account_name claimer, account_name bond_name,
