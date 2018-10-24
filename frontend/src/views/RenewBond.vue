@@ -13,7 +13,7 @@
 export default {
   data() {
     return {
-      date: null
+      date: new Date(this.bond.expiration * 1000).toISOString()
     };
   },
   props: ["bond"],
