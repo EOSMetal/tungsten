@@ -4,8 +4,11 @@
       <div class="w-container">
         <div class="w-row">
           <div class="column w-col w-col-8">
-            <h1 class="brand-text page-title">Dashboard</h1>
-            <h2 class="page-subtitle">View your bonds here</h2>
+            <h1 class="brand-text page-title">Active Bonds</h1>
+            <h2 class="page-subtitle">View active bonds here</h2>
+            <div class="page-subtitle">
+              Search <input type="text" v-model="searchQuery" class="search-input">
+            </div>
           </div>
           <div class="align-right w-col w-col-4">
             <router-link :to="{name: 'createBond'}" class="navy-button white">Create New Bond</router-link>
@@ -16,7 +19,7 @@
     <section id="Dashboard" class="section">
       <div class="container w-container">
         <div class="columns-2 w-row">
-          <div v-for="bond in bonds" :key="bond.name" class="column-4 w-col w-col-4">
+          <div v-for="bond in filteredBonds" :key="bond.name" class="column-4 w-col w-col-4">
             <div class="bond-block">
               <h2 class="bond-creator">{{bond.creator}}</h2>
               <h2 class="bond-name-title">
@@ -40,11 +43,23 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      bonds: []
+      bonds: [],
+      searchQuery: ""
     };
   },
   computed: {
-    ...mapState(["config"])
+    ...mapState(["config"]),
+    filteredBonds() {
+      if (this.searchQuery) {
+        return this.bonds.filter(
+          b =>
+            b.creator.includes(this.searchQuery) ||
+            b.name.includes(this.searchQuery)
+        );
+      } else {
+        return this.bonds;
+      }
+    }
   },
   async mounted() {
     const fetchBonds = async (lower_bound = 0) => {
@@ -67,3 +82,10 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.search-input {
+  border: none;
+  border-bottom: solid 3px #2d3e4f;
+}
+</style>
