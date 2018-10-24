@@ -2,7 +2,7 @@
   <footer class="footer center">
     <div class="container-3 w-container">
       <div class="w-row">
-        <div class="w-col w-col-6">
+        <div class="w-col w-col-4">
           <div class="footer-text">
             <a class="fulltime-link" href="http://www.fulltime.digital/">
               <img src="@/assets/images/fulltime-logo-32.jpg" class="fulltime-logo"/>
@@ -10,9 +10,14 @@
             </a>
           </div>
         </div>
-        <div class="column-16 w-clearfix w-col w-col-6">
+        <div class="w-col w-col-4" style="text-align: center">
+          <a href="https://github.com/EOSMetal/tungsten" target="_blank">
+            <fa-icon :icon="['fab', 'github']" size="lg" class="gihub-icon"/>
+          </a>
+        </div>
+        <div class="w-col w-col-4" style="text-align: right">
           <a href="https://eosmetal.io/" target="_blank">
-            <img src="@/assets/images/eosmetal-logo.png" width="79" alt="EOSMetal" class="image-2">
+            <img src="@/assets/images/eosmetal-logo.png" width="79" alt="EOSMetal">
           </a>
         </div>
       </div>
@@ -33,6 +38,10 @@ export default {
 }
 .fulltime-logo {
   margin-top: -3px;
+}
+.gihub-icon {
+  margin-top: 6px;
+  color: black;
 }
 .footer {
   padding-top: 40px;
