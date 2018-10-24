@@ -7,7 +7,7 @@
             <h1 class="brand-text page-title">Examine Bond</h1>
             <h2 class="page-subtitle">Review the bond details below</h2>
           </div>
-          <div v-if="!loadingBond && bond && Date.now() < bond.expiration * 1000" class="align-right w-col w-col-4">
+          <div v-if="canCreateClaim" class="align-right w-col w-col-4">
             <router-link :to="{name: 'createClaim', params: {bondName: bond.name}}" class="navy-button white">
               File New Claim
             </router-link>
@@ -114,7 +114,15 @@ export default {
     };
   },
   computed: {
-    ...mapState(["bond", "loadingBond", "config", "account"])
+    ...mapState(["bond", "loadingBond", "config", "account"]),
+    canCreateClaim() {
+      return (
+        !this.loadingBond &&
+        this.bond &&
+        Date.now() < this.bond.expiration * 1000 &&
+        this.bond.arbitrator !== this.account.name
+      );
+    }
   },
   async mounted() {
     const fetchClaims = async (lower_bound = 0) => {
