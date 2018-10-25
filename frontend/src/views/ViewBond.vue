@@ -116,12 +116,15 @@ export default {
   computed: {
     ...mapState(["bond", "loadingBond", "config", "account"]),
     canCreateClaim() {
-      return (
+      const notExpired =
         !this.loadingBond &&
         this.bond &&
-        Date.now() < this.bond.expiration * 1000 &&
-        this.bond.arbitrator !== this.account.name
-      );
+        Date.now() < this.bond.expiration * 1000;
+      if (!this.account) {
+        return notExpired;
+      } else {
+        return notExpired && this.bond.arbitrator !== this.account.name;
+      }
     }
   },
   async mounted() {
