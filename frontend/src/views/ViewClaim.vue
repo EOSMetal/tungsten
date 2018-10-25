@@ -57,7 +57,7 @@
                   <h2 class="bond-answer"><strong>(Language: {{claim.language}})</strong></h2>
                 </div>
               </div>
-              <pre class="contract-answer" style="font-weight: bold">{{claim.details}}</pre>
+              <vue-markdown class="contract-text" :source="claim.details"/>
             </div>
           </div>
           <div class="w-col w-col-4">

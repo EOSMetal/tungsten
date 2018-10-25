@@ -18,6 +18,9 @@ Vue.use(Modal, { dynamic: true, injectModalsContainer: true });
 import { Collapse } from "bootstrap-vue/es/components";
 Vue.use(Collapse);
 
+import VueMarkdown from "vue-markdown";
+Vue.component("vue-markdown", VueMarkdown);
+
 Vue.config.productionTip = false;
 
 new Vue({

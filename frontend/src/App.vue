@@ -53,4 +53,37 @@ export default {
 .w-input {
   margin-bottom: 24px;
 }
+.contract-text {
+  color: #007fd3;
+  line-height: 16px;
+  letter-spacing: 0.25px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+.contract-text h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #007fd3;
+}
+.contract-text h1 {
+  font-size: 160%;
+}
+.contract-text h2 {
+  font-size: 140%;
+}
+.contract-text h3 {
+  font-size: 120%;
+}
+.contract-text h4 {
+  font-size: 120%;
+}
+.contract-text h5 {
+  font-size: 120%;
+}
+.contract-text h6 {
+  font-size: 110%;
+}
 </style>
