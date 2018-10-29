@@ -1,3 +1,7 @@
+![EOSMetal](./logo-text-grey.jpg "EOSMetal")
+
+[https://eosmetal.io](https://eosmetal.io)
+
 # Bond Contract
 
 This contract allows users to place a stake that will act as a security deposit
